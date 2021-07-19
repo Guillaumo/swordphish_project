@@ -136,4 +136,9 @@ class Destinataire
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->firstname.' '.$this->lastname.' de l\'agence '.$this->office;
+    }
 }

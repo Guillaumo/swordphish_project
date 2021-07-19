@@ -2,6 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Campagne;
+use App\Entity\Destinataire;
+use App\Entity\ResultCampaignUser;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -26,7 +29,11 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-tachometer-alt');
+        yield MenuItem::section();
+        yield MenuItem::linkToCrud('Les campagnes', 'fas fa-paper-plane', Campagne::class);
+        yield MenuItem::linkToCrud('Les destinataires', 'fas fa-users', Destinataire::class);
+        yield MenuItem::linkToCrud('Les résultats', 'fas fa-list-alt', ResultCampaignUser::class);
+
     }
 }
