@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CampagneRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Campagne
 {
@@ -28,7 +29,7 @@ class Campagne
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\NotBlank
+     * 
      */
     private $date;
 
@@ -75,6 +76,14 @@ class Campagne
         $this->date = $date;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setDateValue()
+    {
+        $this->date = new \DateTime();
     }
 
     /**
