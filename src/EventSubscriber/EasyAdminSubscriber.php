@@ -10,11 +10,24 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
-    // public function onControllerEvent(ControllerEvent $event)
-    // {
-    //     // ...
-    // }
 
+    private $destinataireRepository;
+
+    /**
+     * fonction constructeur: initialiser le repository de Destinataire à l'appel d'une instance de la classe
+     *
+     * @param DestinataireRepository $destinataireRepository
+     */
+    public function __construct(DestinataireRepository $destinataireRepository)
+    {
+        $this->destinataireRepository = $destinataireRepository;
+    }
+
+    /**
+     * Fonction qui définit un tableau d'événements
+     *
+     * @return array
+     */
     public static function getSubscribedEvents()
     {
         return [
@@ -23,7 +36,14 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function setCampagneDate(BeforeEntityPersistedEvent $event, DestinataireRepository $destinataireRepository)
+    /**
+     * Fonction permettant de fixer les valeurs de date et destinataires de l'entité campagne
+     * avant l'événement de création en BD
+     *
+     * @param BeforeEntityPersistedEvent $event
+     * @return void
+     */
+    public function setCampagneDate(BeforeEntityPersistedEvent $event)
     {
         $entity = $event->getEntityInstance();
 
@@ -32,7 +52,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             return;
         }
         
-        $destinataires = $destinataireRepository->findAll();
+        $destinataires = $this->destinataireRepository->findAll();
         $now = new \DateTime();
         $entity->setDate($now);
         foreach ($destinataires as $destinataire)

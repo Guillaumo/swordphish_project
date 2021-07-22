@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CampagneCrudController extends AbstractCrudController
@@ -29,19 +30,19 @@ class CampagneCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('une campagne')
             ->setEntityLabelInPlural('Les Campagnes')
-            ->setDefaultSort(['date' => 'DESC']);
+            ->setDefaultSort(['date' => 'DESC','id' => 'DESC']);
     }
 
     public function configureActions(Actions $actions): Actions
     {
         $sendEmail = Action::new('sendEmail','Envoi','fas fa-mail-bulk')
-            ->linkToRoute('admin',function(Campagne $campagne) {
+            ->linkToRoute('admin_email_envoi',function(Campagne $campagne) {
                 return ['uid' => $campagne->getId(),];
             })
             ->addCssClass('btn btn-danger')
         ;
         $sendTest = Action::new('sendTest','Envoi test','fas fa-envelope')
-            ->linkToRoute('admin',[])
+        ->linkToRoute('admin_email_test',[])
             ->addCssClass('btn btn-success')
         ;
         $statistic =Action::new('statistic','Stat campagne','fas fa-chart-line')
@@ -55,18 +56,16 @@ class CampagneCrudController extends AbstractCrudController
         ;
     }
 
-    // public function createEntity(string $entityFqcn)
-    // {
-    //     $campagne=new Campagne();
-    // }
-
     public function configureFields(string $pageName): iterable
     {
-
+        yield IdField::new('id')
+            ->hideOnForm()
+        ;
         yield AssociationField::new('destinataires')
            ->setFormTypeOptions([
                'multiple' => true,
            ])
+           ->setHelp('Pas besoin de sélectionner les destinataires, ils sont tous sélectionnés par défaut à la création d\'une campagne. Vous pouvez modifier la liste en enlevant des destinataires en mode edit.')
         ;
         
         yield TextField::new('name','Intitulé');
