@@ -72,6 +72,7 @@ class EmailController extends AbstractController
             // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
             -> htmlTemplate('email/index.html.twig')
             ->context([
+                'id_campagne' => $uid,
                 'id_destinataire' => $destinataire -> getId(),
             ])
             ;
