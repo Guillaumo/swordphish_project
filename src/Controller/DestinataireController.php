@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ResultCampaignUser;
 use App\Repository\CampagneRepository;
 use App\Repository\DestinataireRepository;
+use App\Repository\ResultCampaignUserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,9 +26,9 @@ class DestinataireController extends AbstractController
     /**
      * @Route("/destinataire/{id_c}/{id_d}", name="destinataire_user")
      */
-    public function landingPage($id_c,$id_d,CampagneRepository $campagneRepository,DestinataireRepository $destinataireRepository,EntityManagerInterface $entityManagerInterface): Response
+    public function landingPage($id_c,$id_d,CampagneRepository $campagneRepository,DestinataireRepository $destinataireRepository,EntityManagerInterface $entityManagerInterface, ResultCampaignUserRepository $resultCampaignUserRepository): Response
     {
-        // On récupère les objets camapagne et destinataire correspondants aux id transmis
+        // On récupère les objets campagne et destinataire correspondants aux id transmis
         $campagne = $campagneRepository->findOneBy(['id' => $id_c]);
         $destinataire = $destinataireRepository->findOneBy(['id' => $id_d]);
 
@@ -69,7 +70,13 @@ class DestinataireController extends AbstractController
         $username=shell_exec("echo %username%" );
 
         // On crée l'objet de la class ResultCampaignUser correspondant
-        $resultCampaignUser = new ResultCampaignUser;
+        if ($resultCampaignUser = $resultCampaignUserRepository -> findOneBy(['campagne' => $campagne, 'destinataire' => $destinataire])) {
+            $resultCampaignUser = $resultCampaignUserRepository -> findOneBy(['campagne' => $campagne, 'destinataire' => $destinataire]);
+        } else
+        {
+            $resultCampaignUser = new ResultCampaignUser;
+        }
+        
         $resultCampaignUser -> setUserip($ip);
         $resultCampaignUser -> setUsername($username);
         $resultCampaignUser -> setHostname($host);

@@ -51,35 +51,70 @@ class EmailController extends AbstractController
     public function sendEmail($uid, CampagneRepository $campagneRepository, MailerInterface $mailer): Response
     {
         // on récupère l'objet de la campagne sélectionnée pour l'envoi
-        $campagne = $campagneRepository -> findOneBy(['id' => $uid]);
+        $campagne = $campagneRepository->findOneBy(['id' => $uid]);
         // on récupère les destinataires de la campagne sélectionnée
-        $destinataires = $campagne -> getDestinataires();
-
-        foreach($destinataires as $destinataire)
-        {
-            // on récupère l'adresse email du destinataire
-            $address = $destinataire -> getEmail();
-            // création d'un nouvel email pour l'envoi vers chaque destinataire
-            $email = (new TemplatedEmail())
-            ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
-            ->to($address)
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            ->priority(TemplatedEmail::PRIORITY_HIGH)
-            ->subject('Gagner des tickets de cinéma !')
-            // ->text('Sending emails is fun again!')
-            // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
-            -> htmlTemplate('email/index.html.twig')
-            ->context([
-                'id_campagne' => $uid,
-                'id_destinataire' => $destinataire -> getId(),
-            ])
-            ;
-
-            $mailer->send($email);
-        }
+        $destinataires = $campagne->getDestinataires();
         
+        // echo '<pre>group_dest : ';
+        // var_dump(get_object_vars($destinataires));
+        // echo '</pre>';
+        // die;
+
+        // Nombre de destinataires à envoyer dans le même interval de temps
+        $nb_destinataires = 2;
+        // Interval de temps en minutes
+        $interval = 1;
+        $tab_dest = [];
+
+        // foreach ($destinataires as $destinataire)
+        // {   
+        //     // on crée un tableau de destinataires
+        //     array_push($tab_dest,$destinataire);
+        // }
+
+        // Longueur du tableau des destinataires
+        // $count = count($tab_dest);
+
+        
+
+        // while ($count) {
+            // on sélectionne au hasard un groupe de destinataires
+            // $group_dest = array_rand($tab_dest,$nb_destinataires);
+            
+
+            foreach ($destinataires as $destinataire) {
+                // on récupère l'adresse email du destinataire
+                $address = $destinataire->getEmail();
+                
+                // création d'un nouvel email pour l'envoi vers chaque destinataire
+                $email = (new TemplatedEmail())
+                    ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
+                    ->to($address)
+                    //->cc('cc@example.com')
+                    //->bcc('bcc@example.com')
+                    //->replyTo('fabien@example.com')
+                    ->priority(TemplatedEmail::PRIORITY_HIGH)
+                    ->subject('Gagner des tickets de cinéma !')
+                    // ->text('Sending emails is fun again!')
+                    // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
+                    ->htmlTemplate('email/index.html.twig')
+                    ->context([
+                        'id_campagne' => $uid,
+                        'id_destinataire' => $destinataire->getId(),
+                    ]);
+
+                $mailer->send($email);
+            }
+            // On suspend le script avant de passer au groupe suivant, en nombre de secondes
+            // sleep($interval*60);
+            // On récupére le tableau de destinataires restant
+            // $tab_dest = array_values(array_diff($group_dest));
+            // longueur de ce tableau au cas où count est toujours >0
+            // $count = count($tab_dest);
+        // }
+
+
+
 
         return $this->redirectToRoute('admin');
     }
