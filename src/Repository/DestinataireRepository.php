@@ -22,11 +22,11 @@ class DestinataireRepository extends ServiceEntityRepository
     // /**
     //  * @return Destinataire[] Returns an array of Destinataire objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findByCampagneField($value)
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
+            ->andWhere(':val MEMBER OF d.campagnes')
             ->setParameter('val', $value)
             ->orderBy('d.id', 'ASC')
             ->setMaxResults(10)
@@ -34,7 +34,22 @@ class DestinataireRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+    
+    // /**
+    //  * @return Destinataire[] Returns an array of Destinataire objects
+    //  */
+    
+    public function findByCampagneFieldRandom($value)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere(':val MEMBER OF d.campagnes')
+            ->setParameter('val', $value)
+            ->orderBy('rand()')
+            // ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     /*
     public function findOneBySomeField($value): ?Destinataire

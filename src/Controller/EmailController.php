@@ -5,11 +5,13 @@ namespace App\Controller;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use App\Repository\CampagneRepository;
+use App\Repository\DestinataireRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class EmailController extends AbstractController
 {
@@ -48,41 +50,33 @@ class EmailController extends AbstractController
     /**
      * @Route("/admin/email/envoi/{uid}", name="admin_email_envoi")
      */
-    public function sendEmail($uid, CampagneRepository $campagneRepository, MailerInterface $mailer): Response
+    public function sendEmail($uid, CampagneRepository $campagneRepository, DestinataireRepository $destinataireRepository, MailerInterface $mailer): Response
     {
         // on récupère l'objet de la campagne sélectionnée pour l'envoi
         $campagne = $campagneRepository->findOneBy(['id' => $uid]);
-        // on récupère les destinataires de la campagne sélectionnée
-        $destinataires = $campagne->getDestinataires();
-        
-        // echo '<pre>group_dest : ';
-        // var_dump(get_object_vars($destinataires));
-        // echo '</pre>';
-        // die;
-
+        // on récupère les destinataires de la campagne sélectionnée rangés aléatoirement
+        $destinataires = $destinataireRepository->findByCampagneFieldRandom([$campagne]);
         // Nombre de destinataires à envoyer dans le même interval de temps
         $nb_destinataires = 2;
         // Interval de temps en minutes
         $interval = 1;
-        $tab_dest = [];
-
-        // foreach ($destinataires as $destinataire)
-        // {   
-        //     // on crée un tableau de destinataires
-        //     array_push($tab_dest,$destinataire);
-        // }
-
         // Longueur du tableau des destinataires
-        // $count = count($tab_dest);
-
-        
-
-        // while ($count) {
-            // on sélectionne au hasard un groupe de destinataires
-            // $group_dest = array_rand($tab_dest,$nb_destinataires);
+        $count = count($destinataires);
+        // On boucle sur l'ensemble des destinataires pour former les groupes d'envoi
+        while ($count>0) {
+            // on sélectionne un groupe de destinataires
+            $group_dest = array_slice($destinataires,0,$nb_destinataires);
             
+            // pour test
+            $tab_address =[];
 
-            foreach ($destinataires as $destinataire) {
+            // echo '<pre>adresses groupe : ';
+            // var_dump($tab_address);
+            // echo '</pre>';
+            // die;
+            
+            // Envoi email au groupe de destinataires
+            foreach ($group_dest as $destinataire) {
                 // on récupère l'adresse email du destinataire
                 $address = $destinataire->getEmail();
                 
@@ -103,17 +97,38 @@ class EmailController extends AbstractController
                         'id_destinataire' => $destinataire->getId(),
                     ]);
 
-                $mailer->send($email);
+                try
+                {
+                    $mailer->send($email);
+                }
+                catch (TransportExceptionInterface $mailerException)
+                {
+                    throw $mailerException;
+                }
+                
+                // pour test
+                array_push($tab_address,$address);
+            
             }
+
+            if(count($group_dest)>=$count)
+            {
+                break;
+            }
+            // On récupére le tableau de destinataires restants
+            $destinataires = array_values(array_diff($destinataires,$group_dest));
+            // on vérifie la longueur du tableau de destinataires restants
+            $count = count($destinataires);
+
             // On suspend le script avant de passer au groupe suivant, en nombre de secondes
-            // sleep($interval*60);
-            // On récupére le tableau de destinataires restant
-            // $tab_dest = array_values(array_diff($group_dest));
-            // longueur de ce tableau au cas où count est toujours >0
-            // $count = count($tab_dest);
-        // }
+            sleep($interval*60);
 
-
+            // pour test
+            // echo '<pre>adresses groupe : ';
+            // var_dump($tab_address);
+            // echo '</pre>';
+            // die;
+        }
 
 
         return $this->redirectToRoute('admin');

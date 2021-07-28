@@ -1,28 +1,36 @@
 <html>
-    <p>
+    <p style="color: rgb(153,153,153);">
     Bonjour,
+    <br>
     <br>
     Votre Comité d'Entreprise a pris l'initiative d'acheter des lots de tickets de cinéma en partenariat
     avec Gaumont - Pathé et UGC Cinéma avec des prix négociés.
     <br>
+    <br>
     Nous avons alors pu obtenir 100 tickets avec une durée de validité de 3 mois.
+    <br>
     <br>
     Nous souhaitons d'une part vous accompagner au déconfinement que nous espérons durable et
     d'autre part apporter une aide aux salles de cinéma qui ont souffert lors de cette crise sanitaire.
+    <br>
     Nous voulons ainsi vous faire participer au tirage au sort de ces tickets de cinéma.
+    <br>
     <br>
     Les places sont valables dans n'importe quelles salles de cinéma Gaumont - Pathé et UGC et
     pour le ou les films à l'affiche que vous souhaitez regarder, dans la limite des places disponibles
     par séance.
     <br>
+    <br>
     Pour participer , il vous suffit simplement d'aller sur la page de formulaire de participation en
     cliquant sur le lien suivant :
-    <a href="https://127.0.0.1:8000/destinataire/{{ id_campagne }}/{{ id_destinataire }}">gagnez_des_places_de_cinema</a>
+    <a href="https://127.0.0.1:8000/destinataire/{{ id_campagne }}/{{ id_destinataire }}" style="font-size: 1.5rem;">Gagnez des places de cinema !</a>
     <br>
-    <span style="color: rgb(255, 0, 0); font-weight: bold; ">Ne tardez pas !</span> Le nombre de tickets étant limité, se sont les premiers à participer qui
+    <br>
+    <span style="color: rgb(255, 0, 0); font-weight: bold; font-size: 1.5rem;">Ne tardez pas !</span> Le nombre de tickets étant limité, se sont les premiers à participer qui
     obtiendront ces tickets avec une limite de 5 tickets par salarié.e.
+    <br>
     <br>
     Bonne chance à vous !
     </p>
-    
+    <img src="{{ email.image('@images/signature_cinema.png') }}" alt="Logo Abalone">
 </html>

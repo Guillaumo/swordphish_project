@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class DestinataireCrudController extends AbstractCrudController
@@ -28,6 +29,7 @@ class DestinataireCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        yield AssociationField::new('campagnes');
         yield TextField::new('lastname', 'Nom');
         yield TextField::new('firstname', 'Prénom');
         yield EmailField::new('email', 'Email');

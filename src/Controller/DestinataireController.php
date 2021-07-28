@@ -90,7 +90,8 @@ class DestinataireController extends AbstractController
 
         return $this->render('destinataire/index.html.twig', [
             'controller_name' => 'DestinataireController',
-            'id_destinataire' => $id_d,
+            'nom_destinataire' => $resultCampaignUser->getDestinataire()->getLastname(),
+            'prenom_destinataire' => $resultCampaignUser->getDestinataire()->getFirstname(),
             'ip' => $ip,
             'host' => $host,
             'nav' => $nav,
