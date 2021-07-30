@@ -45,12 +45,18 @@ class Destinataire
     private $office;
 
     /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Campagne", mappedBy="destinataires")
+     */
+    private $campagnes;
+   
+    /**
      * @ORM\OneToMany(targetEntity=ResultCampaignUser::class, mappedBy="destinataire")
      */
     private $results;
 
     public function __construct()
     {
+        $this->campagnes = new ArrayCollection();
         $this->results = new ArrayCollection();
     }
 
@@ -104,6 +110,32 @@ class Destinataire
     {
         $this->office = $office;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|Campagne[]
+     */
+    public function getCampagnes(): Collection
+    {
+        return $this->campagnes;
+    }
+
+    public function addCampagne(Campagne $campagne): self
+    {
+        if (!$this->campagnes->contains($campagne)) {
+            $this->campagnes[] = $campagne;
+            $campagne->addDestinataire($this);
+        }
+        return $this;
+    }
+
+    public function removeCampagne(Campagne $campagne): self
+    {
+        if ($this->campagnes->contains($campagne)) {
+            $this->campagnes->removeElement($campagne);
+            $campagne->removeDestinataire($this);
+        }
         return $this;
     }
 

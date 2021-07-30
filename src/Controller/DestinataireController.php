@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ResultCampaignUser;
+use App\Form\ResultFormType;
 use App\Repository\CampagneRepository;
 use App\Repository\DestinataireRepository;
 use App\Repository\ResultCampaignUserRepository;
@@ -10,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class DestinataireController extends AbstractController
 {
@@ -26,7 +28,7 @@ class DestinataireController extends AbstractController
     /**
      * @Route("/destinataire/{id_c}/{id_d}", name="destinataire_user")
      */
-    public function landingPage($id_c,$id_d,CampagneRepository $campagneRepository,DestinataireRepository $destinataireRepository,EntityManagerInterface $entityManagerInterface, ResultCampaignUserRepository $resultCampaignUserRepository): Response
+    public function landingPage($id_c,$id_d,CampagneRepository $campagneRepository,DestinataireRepository $destinataireRepository,EntityManagerInterface $entityManagerInterface, ResultCampaignUserRepository $resultCampaignUserRepository, Request $request): Response
     {
         // On récupère les objets campagne et destinataire correspondants aux id transmis
         $campagne = $campagneRepository->findOneBy(['id' => $id_c]);
@@ -72,10 +74,14 @@ class DestinataireController extends AbstractController
         // On crée l'objet de la class ResultCampaignUser correspondant
         if ($resultCampaignUser = $resultCampaignUserRepository -> findOneBy(['campagne' => $campagne, 'destinataire' => $destinataire])) {
             $resultCampaignUser = $resultCampaignUserRepository -> findOneBy(['campagne' => $campagne, 'destinataire' => $destinataire]);
+
         } else
         {
             $resultCampaignUser = new ResultCampaignUser;
         }
+
+        $form = $this->createForm(ResultFormType::class, $resultCampaignUser);
+        $form->handleRequest($request); 
         
         $resultCampaignUser -> setUserip($ip);
         $resultCampaignUser -> setUsername($username);
@@ -89,13 +95,7 @@ class DestinataireController extends AbstractController
         $entityManagerInterface -> flush();
 
         return $this->render('destinataire/index.html.twig', [
-            'controller_name' => 'DestinataireController',
-            'nom_destinataire' => $resultCampaignUser->getDestinataire()->getLastname(),
-            'prenom_destinataire' => $resultCampaignUser->getDestinataire()->getFirstname(),
-            'ip' => $ip,
-            'host' => $host,
-            'nav' => $nav,
-            'username' => $username,
+            'form_destinataire' => $form->createView(),
         ]);
 
     }

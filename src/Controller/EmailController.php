@@ -52,6 +52,7 @@ class EmailController extends AbstractController
      */
     public function sendEmail($uid, CampagneRepository $campagneRepository, DestinataireRepository $destinataireRepository, MailerInterface $mailer): Response
     {
+        ini_set('max_execution_time', 0);
         // on récupère l'objet de la campagne sélectionnée pour l'envoi
         $campagne = $campagneRepository->findOneBy(['id' => $uid]);
         // on récupère les destinataires de la campagne sélectionnée rangés aléatoirement
@@ -59,21 +60,13 @@ class EmailController extends AbstractController
         // Nombre de destinataires à envoyer dans le même interval de temps
         $nb_destinataires = 2;
         // Interval de temps en minutes
-        $interval = 1;
+        $interval = 2;
         // Longueur du tableau des destinataires
         $count = count($destinataires);
         // On boucle sur l'ensemble des destinataires pour former les groupes d'envoi
         while ($count>0) {
             // on sélectionne un groupe de destinataires
             $group_dest = array_slice($destinataires,0,$nb_destinataires);
-            
-            // pour test
-            $tab_address =[];
-
-            // echo '<pre>adresses groupe : ';
-            // var_dump($tab_address);
-            // echo '</pre>';
-            // die;
             
             // Envoi email au groupe de destinataires
             foreach ($group_dest as $destinataire) {
@@ -106,8 +99,6 @@ class EmailController extends AbstractController
                     throw $mailerException;
                 }
                 
-                // pour test
-                array_push($tab_address,$address);
             
             }
 

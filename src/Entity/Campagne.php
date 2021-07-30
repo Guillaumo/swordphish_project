@@ -34,7 +34,7 @@ class Campagne
     private $date;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Destinataire::class)
+     * @ORM\ManyToMany(targetEntity=Destinataire::class, inversedBy="campagnes")
      */
     private $destinataires;
 
@@ -105,7 +105,9 @@ class Campagne
 
     public function removeDestinataire(Destinataire $destinataire): self
     {
-        $this->destinataires->removeElement($destinataire);
+        if ($this->destinataires->contains($destinataire)) {
+            $this->destinataires->removeElement($destinataire);
+        }
 
         return $this;
     }
@@ -138,5 +140,10 @@ class Campagne
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return 'Campagne '.$this->name;
     }
 }

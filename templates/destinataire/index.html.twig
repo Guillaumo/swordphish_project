@@ -9,13 +9,17 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Bonjour {{ prenom_destinataire }} {{ nom_destinataire }}! ✅</h1>
+    <h1>GAGNEZ DES TICKETS DE CINEMA</h1>
     <p>
-        Votre navigateur est : {{ nav }} <br>
-        Votre adresse IP est : {{ ip }} <br>
-        Votre nom d'hôte est : {{ host }} <br>
-        Votre nom de session est : {{ username }} <br>
+        Plus vite vous envoyez le formulaire ci-dessous, plus de chance
+        vous aurez à gagner vos tickets.
     </p>
+    <h2>Nombre de tickets restants disponibles : 10</h2>
+    <div>
+        {{form_start(form_destinataire)}}
+        {{form_widget(form_destinataire)}}
+        {{form_end(form_destinataire)}}
+    </div>
     <p id="js"></p>
     
 </div>

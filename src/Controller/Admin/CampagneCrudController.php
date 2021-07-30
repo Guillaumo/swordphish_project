@@ -67,16 +67,13 @@ class CampagneCrudController extends AbstractCrudController
            ])
            ->setHelp('Pas besoin de sélectionner les destinataires, ils sont tous sélectionnés par défaut à la création d\'une campagne. Vous pouvez modifier la liste en enlevant des destinataires en mode edit.')
         ;
-        
         yield TextField::new('name','Intitulé');
         yield DateField::new('date')
-        // yield DateTimeField::new('date')
             ->setFormTypeOptions([
                 'html5' => true,
                 'years' => range(date('Y'), date('Y')+2),
                 'widget' => 'single_text',
             ])
-            // ->setValue(new \DateTime())
             ->hideOnForm()
             ;
 
