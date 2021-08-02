@@ -1,0 +1,21 @@
+header {
+    width: 100%;
+    height: 160px;
+    background-color: #3c3c3b;
+}
+
+footer {
+    width: 100%;
+    color:#fff;
+    margin-top: 6rem;
+    padding:2rem;
+    background-color: #e91c24;
+}
+
+.social-icons a {
+    padding:0.5rem;}
+   
+
+.social-icons a:hover {
+    animation: rotate-btn .5s linear 1;
+}

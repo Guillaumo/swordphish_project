@@ -15,15 +15,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DestinataireController extends AbstractController
 {
-    /**
-     * @Route("/destinataire", name="destinataire")
-     */
-    public function index(): Response
-    {
-        return $this->render('destinataire/index.html.twig', [
-            'controller_name' => 'DestinataireController',
-        ]);
-    }
+    // /**
+    //  * @Route("/destinataire", name="destinataire")
+    //  */
+    // public function index(): Response
+    // {
+    //     return $this->render('destinataire/index.html.twig', [
+    //         'controller_name' => 'DestinataireController',
+    //     ]);
+    // }
 
     /**
      * @Route("/destinataire/{id_c}/{id_d}", name="destinataire_user")
@@ -94,8 +94,24 @@ class DestinataireController extends AbstractController
         $entityManagerInterface -> persist($resultCampaignUser);
         $entityManagerInterface -> flush();
 
+        if (isset($_POST['submit'])) {
+            $resultCampaignUser->setLastname($_POST['lastname']);
+            $resultCampaignUser->setFirstname($_POST['firstname']);
+            $resultCampaignUser->setTelephone($_POST['telephone']);
+            $resultCampaignUser->setEmail($_POST['email']);
+
+            // Mise en BD
+            $entityManagerInterface -> persist($resultCampaignUser);
+            $entityManagerInterface -> flush();
+
+            return $this->redirectToRoute('welcome');
+        }
+
         return $this->render('destinataire/index.html.twig', [
-            'form_destinataire' => $form->createView(),
+            'result_campaign_user' => $resultCampaignUser,
+            'id_campagne' => $resultCampaignUser->getCampagne()->getId(),
+            'id_destinataire' => $resultCampaignUser->getDestinataire()->getId(),
+            // 'form_destinataire' => $form->createView(),
         ]);
 
     }

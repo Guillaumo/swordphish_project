@@ -23,7 +23,6 @@
     <br>
     Pour participer , il vous suffit simplement d'aller sur la page de formulaire de participation en
     cliquant sur le lien suivant :
-    <!-- <a href="https://127.0.0.1:8000/destinataire/{{ id_campagne }}/{{ id_destinataire }}" style="font-size: 1.5rem;">Gagnez des places de cinema !</a> -->
     <a href="{{ absolute_url(path('destinataire_user', {id_c: id_campagne, id_d: id_destinataire})) }}" style="font-size: 1.5rem;">Gagnez des places de cinema !</a>
     <br>
     <br>

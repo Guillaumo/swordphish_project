@@ -22,7 +22,7 @@ class ResultFormType extends AbstractType
             ->add('telephone', TelType::class, ['label' => 'Téléphone'])
             ->add('email', EmailType::class)
             ->add('tickets_number', NumberType::class, ['label' =>'Nombre de tickets', 'mapped' => false])
-            ->add('submit', SubmitType::class,['label' => 'Participer !', 'attr' => ['class' => 'btn vtn-success']])
+            ->add('submit', SubmitType::class,['label' => 'Participer !', 'attr' => ['class' => 'btn btn-success']])
         ;
     }
 
@@ -31,12 +31,12 @@ class ResultFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ResultCampaignUser::class,
              // enable/disable CSRF protection for this form
-             'csrf_protection' => true,
-             // the name of the hidden HTML field that stores the token
-             'csrf_field_name' => '_token',
-             // an arbitrary string used to generate the value of the token
-             // using a different string for each form improves its security
-             'csrf_token_id'   => 'task_item',
+            //  'csrf_protection' => true,
+            //  // the name of the hidden HTML field that stores the token
+            //  'csrf_field_name' => '_token',
+            //  // an arbitrary string used to generate the value of the token
+            //  // using a different string for each form improves its security
+            //  'csrf_token_id'   => 'task_item',
         ]);
     }
 }
