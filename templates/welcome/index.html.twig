@@ -1,20 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello WelcomeController!{% endblock %}
+{% block title %}Impro Informations{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('css/impro.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/info_visiteur.js') }}" defer></script>
+{% endblock %}
+
+{% block header %}
+    {% include './partials/header_impro.html.twig' %}
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/stgimpro2/Web/SF/swordphish/src/Controller/WelcomeController.php'|file_link(0) }}">src/Controller/WelcomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/stgimpro2/Web/SF/swordphish/templates/welcome/index.html.twig'|file_link(0) }}">templates/welcome/index.html.twig</a></code></li>
-    </ul>
+<div class="container">
+    <h1 class="text-center">Bonjour {{ result_campaign_user.firstname }} {{ result_campaign_user.lastname }} !</h1>
+    <article class="h2 font-weight-bold text-center">
+        <p class="text-primary">
+            Bravo ! Vous pensez avoir gagné {{ tickets }} ticket(s) de cinéma ?
+        </p>
+        <p class="text-danger">
+            En fait, désolé mais non.
+        </p>
+        <p class="text-success">
+            Vous venez de diffuser des informations compromettantes !
+        </p>
+    </article>
+    <article class="h3">
+        <p>
+            La sécurité de vos données a été "hackée" par la technique de "phishing" ou d'"hameçonnage".
+        </p>
+        <p>
+            Voici les données que vous avez transmis à des hackers potentiels :
+        </p>
+    </article>
+    <article class="border border-danger border-5 bg-palered p-2 h4 font-weight-bold">
+        <ul class="list-unstyled">
+            <li>Votre adresse IP : {{ result_campaign_user.userip }}</li>
+            <li>Votre login de session : {{ result_campaign_user.username }}</li>
+            <li>Votre nom de machine : {{ result_campaign_user.hostname }}</li>
+            <li>Votre navigateur : {{ result_campaign_user.navigator }}</li>
+            <li id="js"></li>
+        </ul>
+        <p>Et toutes les informations que vous avez envoyé via le formulaire dont votre email et votre numéro de téléphone.</p>
+    </article>
+    <article class="h4">
+        <p>
+            Ce test, effectué auprès des salariés d'Abalone sur tout le territoire a pour but la prévention des risques en matière de sécurité informatique.
+        </p>
+        <p>
+            <strong>Selon l'ANSSI (Agence nationale de la sécurité des systèmes d'information) :</strong><br>
+            L’hameçonnage reste l’un des principaux vecteurs de la cybercriminalité.<br>
+            Ce type d’attaque vise à obtenir du destinataire d’un courriel d’apparence légitime qu’il transmette ses coordonnées bancaires ou ses identifiants de connexion à des services financiers, afin de lui dérober de l’argent.<br>
+            L’hameçonnage peut également être utilisé dans des <a href="https://www.ssi.gouv.fr/administration/principales-menaces/lespionnage/lattaque-par-hameconnage-cible-spearphishing/">attaques plus ciblées</a> <span class="h5">- vous pouvez cliquer sur le lien sans rique :) -</span> pour essayer d’obtenir d’un employé ses identifiants d’accès aux réseaux professionnels auxquels il peut avoir accès.
+        </p>
+    </article>
+    <article>
+        <p class="h1 font-weight-bold">5 réflexes à avoir lors de la réception d’un courriel :</p>
+        <a href="https://www.ssi.gouv.fr/entreprise/precautions-elementaires/5-reflexes-a-avoir-lors-de-la-reception-duncourriel/" class="h4">https://www.ssi.gouv.fr/entreprise/precautions-elementaires/5-reflexes-a-avoir-lors-de-la-reception-duncourriel/</a>
+    </article>
 </div>
 {% endblock %}

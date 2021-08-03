@@ -2,6 +2,10 @@
 
 {% block title %}Log in!{% endblock %}
 
+{% block stylesheets %}
+    <link rel="icon" sizes="70x70" type="image/webp" href="{{ asset('images/swordphish 70x70.jpg') }}">
+{% endblock %}
+
 {% block body %}
 <form method="post" class="container mt-4">
     {% if error %}
@@ -19,7 +23,7 @@
         <label for="inputUsername" class=" form-label required">Username</label>
         <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
     </fielset>
-    <fieldset class="mb-2">
+    <fieldset class="mt-4 mb-4">
         <label for="inputPassword" class=" form-label required">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
     </fieldset>

@@ -47,21 +47,21 @@ const box = document.getElementById('js');
 //******************************************************************************
 // Largeur X Hauteur
 //******************************************************************************
-box.innerHTML = 'Votre résolution est de ' + screen.width + ' X ' + screen.height + '.';
+box.innerHTML = 'Votre résolution  d\'écran est de ' + screen.width + ' x ' + screen.height + '.';
 
 //******************************************************************************
 // Plug-ins
 //******************************************************************************
 // Nombre de plug-ins installés
-let nbplugin = navigator.plugins.length;
-if (nbplugin) {
-    box.innerHTML += 'Plug-ins installés ( ' + nbplugin + ' ) :';
+// let nbplugin = navigator.plugins.length;
+// if (nbplugin) {
+//     box.innerHTML += 'Plug-ins installés ( ' + nbplugin + ' ) :';
 
-    let i = -1;
-    while (i < nbplugin) { // Affichage des noms des plug-ins
-        i++;
-        box.innerHTML += ' ' + navigator.plugins[i].name + ', ';
-    }
-} else {
-    box.innerHTML += 'Il n\' y a aucun plug-ins installé.';
-}
+//     let i = -1;
+//     while (i < nbplugin) { // Affichage des noms des plug-ins
+//         i++;
+//         box.innerHTML += ' ' + navigator.plugins[i].name + ', ';
+//     }
+// } else {
+//     box.innerHTML += 'Il n\' y a aucun plug-ins installé.';
+// }

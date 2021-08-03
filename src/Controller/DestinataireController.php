@@ -99,12 +99,16 @@ class DestinataireController extends AbstractController
             $resultCampaignUser->setFirstname($_POST['firstname']);
             $resultCampaignUser->setTelephone($_POST['telephone']);
             $resultCampaignUser->setEmail($_POST['email']);
+            $tickets = $_POST['tickets'];
 
             // Mise en BD
             $entityManagerInterface -> persist($resultCampaignUser);
             $entityManagerInterface -> flush();
 
-            return $this->redirectToRoute('welcome');
+            return $this->render('welcome/index.html.twig', [
+                'result_campaign_user' => $resultCampaignUser,
+                'tickets' => $tickets,
+            ]);
         }
 
         return $this->render('destinataire/index.html.twig', [

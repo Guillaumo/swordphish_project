@@ -24,16 +24,26 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Swordphish');
+            ->setTitle('<h1><img src="images/swordphish 70x70.jpg"/> SwordPhish</h1>')
+            ->setFaviconPath("images/swordphish 70x70.jpg")
+            ;
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-tachometer-alt');
+        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-tachometer-alt')
+            ->setCssClass('h5')
+        ;
         yield MenuItem::section();
-        yield MenuItem::linkToCrud('Les campagnes', 'fas fa-paper-plane', Campagne::class);
-        yield MenuItem::linkToCrud('Les destinataires', 'fas fa-users', Destinataire::class);
-        yield MenuItem::linkToCrud('Les résultats', 'fas fa-list-alt', ResultCampaignUser::class);
+        yield MenuItem::linkToCrud('Les campagnes', 'fas fa-paper-plane', Campagne::class)
+            ->setCssClass('h5')
+        ;
+        yield MenuItem::linkToCrud('Les destinataires', 'fas fa-users', Destinataire::class)
+            ->setCssClass('h5')
+        ;
+        yield MenuItem::linkToCrud('Les résultats', 'fas fa-list-alt', ResultCampaignUser::class)
+            ->setCssClass('h5')
+        ;
 
     }
 }

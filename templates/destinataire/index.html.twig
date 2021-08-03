@@ -35,35 +35,35 @@
 				<label for="lastname" class=" form-label required">
 					*Nom
 				</label>
-				<input type="text" id="lastname" name="lastname" required="required" class="form-control required" maxlength="255"/>
+				<input type="text" id="lastname" name="lastname" required class="form-control required" maxlength="255"/>
 			</fieldset>
 
 			<fieldset class="mb-4">
 				<label for="firstname" class=" form-label required">
 					*Prénom
 				</label>
-				<input type="text" id="firstname" name="firstname" required="required" class="form-control required" maxlength="255"/>
+				<input type="text" id="firstname" name="firstname" required class="form-control required" maxlength="255"/>
 			</fieldset>
 
 			<fieldset class="mb-4">
 				<label for="telephone" class=" form-label required">
 					*Téléphone
 				</label>
-				<input type="text" id="telephone" name="telephone" required="required" class="form-control required" maxlength="255"/>
+				<input type="tel" id="telephone" name="telephone" pattern="^([0-9]{10}){1}$" required class="form-control required" maxlength="255"/>
 			</fieldsetclass="mb-4">
 
 			<fieldset class="mb-4">
 				<label for="email" class=" form-label required">
 					*Email
 				</label>
-				<input type="email" id="email" name="email" required="required" class="form-control required" maxlength="255"/>
+				<input type="email" id="email" name="email" required class="form-control required" maxlength="255"/>
 			</fieldset>
 
 			<fieldset class="mb-4">
 				<label for="tickets" class=" form-label required">
 					*Nombre de tickets
 				</label>
-				<input type="text" id="tickets" name="tickets" required="required" class="form-control required" maxlength="1"/>
+				<input type="text" id="tickets" name="tickets" required class="form-control required" maxlength="1"/>
 			</fieldset>
 
 			<fieldset class="mb-4 text-center">
@@ -77,7 +77,7 @@
 			{# {{ form(form_destinataire) }} #}
 		</div>
 
-		{# <p id="js"></p> #}
+		
 
 	</div>
 {% endblock %}
