@@ -8,6 +8,47 @@
     background-color: #3F4756;
 }
 
+.bg-palegrey
+{
+    background-color: #f3f7fb
+}
+
+.bg-footer
+{
+    background-color: #314865;
+}
+
 .border-5 {
     border-width:5px !important;
 }
+
+.lt-6
+{
+    letter-spacing: 6px;
+}
+
+.custom-puce a
+{
+    color: #69A19C;
+    font-weight: 400;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.puce-anim:hover a {
+    margin-left: 0.2rem;
+    color: white;
+  }
+  
+.custom-puce {
+    list-style-type: "+  ";
+  }
+  
+.custom-puce:hover {
+    list-style-type: "×  ";
+  }
+
+.icon-tel-footer::before {
+    width: 16px;
+    margin-right: 0.5rem;
+    display: inline-block;
+  }

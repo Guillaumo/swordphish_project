@@ -3,6 +3,7 @@
 {% block title %}Impro Informations{% endblock %}
 
 {% block stylesheets %}
+    <link rel="icon" sizes="70x70" type="image/webp" href="{{ asset('images/logo_impro favicon.png') }}">
 	<link rel="stylesheet" href="{{ asset('css/impro.css') }}">
 {% endblock %}
 
@@ -62,4 +63,8 @@
         <a href="https://www.ssi.gouv.fr/entreprise/precautions-elementaires/5-reflexes-a-avoir-lors-de-la-reception-duncourriel/" class="h4">https://www.ssi.gouv.fr/entreprise/precautions-elementaires/5-reflexes-a-avoir-lors-de-la-reception-duncourriel/</a>
     </article>
 </div>
+{% endblock %}
+
+{% block footer %}
+    {% include './partials/footer_impro.html.twig' %}
 {% endblock %}
