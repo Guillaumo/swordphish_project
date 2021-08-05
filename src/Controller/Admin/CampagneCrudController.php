@@ -40,9 +40,14 @@ class CampagneCrudController extends AbstractCrudController
                 return ['uid' => $campagne->getId(),];
             })
             ->addCssClass('btn btn-danger')
+            ->setHtmlAttributes([
+                'onclick' => "return(confirm('Etes-vous sûr de vouloir envoyer les emails ?'));"
+            ])
         ;
         $sendTest = Action::new('sendTest','Envoi test','fas fa-envelope')
-        ->linkToRoute('admin_email_test',[])
+        ->linkToRoute('admin_email_test',function(Campagne $campagne) {
+            return ['uid' => $campagne->getId(),];
+        })
             ->addCssClass('btn btn-success')
         ;
         $statistic =Action::new('statistic','Stat campagne','fas fa-chart-line')

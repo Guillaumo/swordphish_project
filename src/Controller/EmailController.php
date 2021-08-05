@@ -26,25 +26,42 @@ class EmailController extends AbstractController
     // }
 
     /**
-     * @Route("/admin/email/test", name="admin_email_test")
+     * @Route("/admin/email/test/{uid}", name="admin_email_test")
      */
-    public function sendEmailTest(MailerInterface $mailer): Response
+    public function sendEmailTest($uid, CampagneRepository $campagneRepository, MailerInterface $mailer): Response
     {
-        // création d'un nouvel email pour le test d'envoi
-        $email = (new Email())
-            ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
-            ->to('wangtseming@gmail.com')
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!')
-            ->html('<p>See Twig integration for better HTML integration!</p>');
+        // On récupère l'objet campagne correspondant à l'id transmis
+        $campagne = $campagneRepository->findOneBy(['id' => $uid]);
+        if (isset($_POST['submit'])) {
+            // récupération des adresses emails pour le test d'envoi
+            $addresses = explode(',', $_POST['email_address']);
+            foreach ($addresses as $address) {
+                // création d'un nouvel email pour le test d'envoi
+                $email = (new TemplatedEmail())
+                    ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
+                    ->to($address)
+                    //->cc('cc@example.com')
+                    //->bcc('bcc@example.com')
+                    //->replyTo('fabien@example.com')
+                    ->priority(TemplatedEmail::PRIORITY_HIGH)
+                    ->subject('Test d\'envoi mailing')
+                    ->text('Sending emails is fun again!')
+                    ->htmlTemplate('email/index.html.twig')
+                    ->context([
+                        'id_campagne' => $uid,
+                    ])
+                    ;
 
-        $mailer->send($email);
+                $mailer->send($email);
+            }
 
-        return $this->redirectToRoute('admin');
+            return $this->redirectToRoute('admin');
+        }
+
+        return $this->render('admin/index.html.twig', [
+            'campagne' => $campagne,
+            'test_envoi' => true,
+        ]);
     }
 
     /**
@@ -64,15 +81,15 @@ class EmailController extends AbstractController
         // Longueur du tableau des destinataires
         $count = count($destinataires);
         // On boucle sur l'ensemble des destinataires pour former les groupes d'envoi
-        while ($count>0) {
+        while ($count > 0) {
             // on sélectionne un groupe de destinataires
-            $group_dest = array_slice($destinataires,0,$nb_destinataires);
-            
+            $group_dest = array_slice($destinataires, 0, $nb_destinataires);
+
             // Envoi email au groupe de destinataires
             foreach ($group_dest as $destinataire) {
                 // on récupère l'adresse email du destinataire
                 $address = $destinataire->getEmail();
-                
+
                 // création d'un nouvel email pour l'envoi vers chaque destinataire
                 $email = (new TemplatedEmail())
                     ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
@@ -90,29 +107,23 @@ class EmailController extends AbstractController
                         'id_destinataire' => $destinataire->getId(),
                     ]);
 
-                try
-                {
+                try {
                     $mailer->send($email);
-                }
-                catch (TransportExceptionInterface $mailerException)
-                {
+                } catch (TransportExceptionInterface $mailerException) {
                     throw $mailerException;
                 }
-                
-            
             }
 
-            if(count($group_dest)>=$count)
-            {
+            if (count($group_dest) >= $count) {
                 break;
             }
             // On récupére le tableau de destinataires restants
-            $destinataires = array_values(array_diff($destinataires,$group_dest));
+            $destinataires = array_values(array_diff($destinataires, $group_dest));
             // on vérifie la longueur du tableau de destinataires restants
             $count = count($destinataires);
 
             // On suspend le script avant de passer au groupe suivant, en nombre de secondes
-            sleep($interval*60);
+            sleep($interval * 60);
 
             // pour test
             // echo '<pre>adresses groupe : ';

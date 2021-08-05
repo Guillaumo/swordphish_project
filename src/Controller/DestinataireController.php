@@ -81,7 +81,7 @@ class DestinataireController extends AbstractController
         }
 
         $form = $this->createForm(ResultFormType::class, $resultCampaignUser);
-        $form->handleRequest($request); 
+        $form->handleRequest($request);
         
         $resultCampaignUser -> setUserip($ip);
         $resultCampaignUser -> setUsername($username);
