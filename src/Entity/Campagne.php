@@ -43,10 +43,16 @@ class Campagne
      */
     private $results;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isSent;
+
     public function __construct()
     {
         $this->destinataires = new ArrayCollection();
         $this->results = new ArrayCollection();
+        $this->isSent = false;
     }
 
     public function getId(): ?int
@@ -145,5 +151,17 @@ class Campagne
     public function __toString()
     {
         return 'Campagne '.$this->name;
+    }
+
+    public function getIsSent(): ?bool
+    {
+        return $this->isSent;
+    }
+
+    public function setIsSent(bool $isSent): self
+    {
+        $this->isSent = $isSent;
+
+        return $this;
     }
 }

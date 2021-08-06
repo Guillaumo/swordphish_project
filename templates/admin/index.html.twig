@@ -8,9 +8,8 @@
 			{{ campagne.name }}</h2>
 		<form name="form_email_address" method="POST" class="card-body">
 			<fieldset class="mb-4">
-                <legend>Saisir les adresses emails pour l'envoi de test en les séparant par une virgule ","</legend>
 				<label for="email_address" class=" form-label required">
-					Email(s)
+					Saisir les adresses emails pour l'envoi de test en les séparant par une virgule ","
 				</label>
 				<input type="email" id="email_address" name="email_address" multiple required class="form-control required"/>
 			</fieldset>
@@ -22,6 +21,7 @@
 			</fieldset>
 		</form>
 	{% endif %}
+
 	<h2 class="text-center">Bienvenue sur le tableau de bord de SwordPhish</h2>
 
 {% endblock %}

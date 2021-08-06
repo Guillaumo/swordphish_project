@@ -6,6 +6,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use App\Repository\CampagneRepository;
 use App\Repository\DestinataireRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,9 +48,9 @@ class EmailController extends AbstractController
                     ->subject('Test d\'envoi mailing')
                     ->text('Sending emails is fun again!')
                     ->htmlTemplate('email/index.html.twig')
-                    ->context([
-                        'id_campagne' => $uid,
-                    ])
+                    // ->context([
+                    //     'id_campagne' => $uid,
+                    // ])
                     ;
 
                 $mailer->send($email);
@@ -67,7 +68,7 @@ class EmailController extends AbstractController
     /**
      * @Route("/admin/email/envoi/{uid}", name="admin_email_envoi")
      */
-    public function sendEmail($uid, CampagneRepository $campagneRepository, DestinataireRepository $destinataireRepository, MailerInterface $mailer): Response
+    public function sendEmail($uid, CampagneRepository $campagneRepository, DestinataireRepository $destinataireRepository, MailerInterface $mailer, EntityManagerInterface $em): Response
     {
         ini_set('max_execution_time', 0);
         // on récupère l'objet de la campagne sélectionnée pour l'envoi
@@ -132,6 +133,10 @@ class EmailController extends AbstractController
             // die;
         }
 
+        // on met à jour le champ isSent de la campagne à true
+        $campagne->setIsSent(true);
+        $em->persist($campagne);
+        $em->flush();
 
         return $this->redirectToRoute('admin');
     }
