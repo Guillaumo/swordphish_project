@@ -66,7 +66,7 @@ class EmailController extends AbstractController
     }
 
     /**
-     * @Route("/admin/email/envoi/{uid}", name="admin_email_envoi")
+     * @Route("/admin/email/campagne/{uid}", name="admin_email_campagne")
      */
     public function sendEmail($uid, CampagneRepository $campagneRepository, DestinataireRepository $destinataireRepository, MailerInterface $mailer, EntityManagerInterface $em): Response
     {
@@ -126,11 +126,6 @@ class EmailController extends AbstractController
             // On suspend le script avant de passer au groupe suivant, en nombre de secondes
             sleep($interval * 60);
 
-            // pour test
-            // echo '<pre>adresses groupe : ';
-            // var_dump($tab_address);
-            // echo '</pre>';
-            // die;
         }
 
         // on met à jour le champ isSent de la campagne à true
@@ -138,6 +133,11 @@ class EmailController extends AbstractController
         $em->persist($campagne);
         $em->flush();
 
-        return $this->redirectToRoute('admin');
+        return $this->render('admin/index.html.twig', [
+            'test_envoi' => false,
+            'stat' => false,
+            'campagne' => $campagne,
+            'num_dest' => count($destinataireRepository->findByCampagneField([$campagne])),
+        ]);
     }
 }

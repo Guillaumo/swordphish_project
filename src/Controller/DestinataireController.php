@@ -105,7 +105,7 @@ class DestinataireController extends AbstractController
             $entityManagerInterface -> persist($resultCampaignUser);
             $entityManagerInterface -> flush();
 
-            return $this->render('welcome/index.html.twig', [
+            return $this->render('destinataire/validationForm.html.twig', [
                 'result_campaign_user' => $resultCampaignUser,
                 'tickets' => $tickets,
             ]);

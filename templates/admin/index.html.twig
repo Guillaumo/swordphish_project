@@ -1,5 +1,16 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
+{% block stylesheets %}
+	{# <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" referrerpolicy="no-referrer"/> #}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
+{% block javascripts %}
+	{# <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script> #}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+	<script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js" defer></script>
+	<script src="{{ asset('js/chart.js') }}" defer></script>
+{% endblock %}
 
 {% block main %}
 
@@ -15,13 +26,45 @@
 			</fieldset>
 
 			<fieldset class="mb-4 text-center">
-				<button type="submit" name="submit" class="btn btn-success btn-lg" onclick = return(confirm('Etes-vous sûr de vouloir envoyer les emails de test ?'));>
+				<button type="submit" name="submit" class="btn btn-success btn-lg" onclick="return(confirm('Etes-vous sûr de vouloir envoyer les emails de test ?'));">
 					Envoyer
 				</button>
 			</fieldset>
 		</form>
+
+	{% elseif stat %}
+		<h2 class="text-center">Statistiques de la campagne
+			"{{ campaign.name }}"
+			du
+			{{ campaign.date|format_datetime('short', 'none') }}</h2>
+
+		<div class="row">
+			<canvas class="col-3 mt-5" id="clicks_stat" width="400" height="150"></canvas>
+			<canvas class="col-3 mt-5" id="submits_stat" width="400" height="150"></canvas>
+		</div>
+
+		<script>
+			let data_clicks = {{ data_clicks|raw }};
+			let data_submits = {{ data_submits|raw }};
+		</script>
+
+	{% elseif campagne.isSent %}
+		<h2 class="text-center">Vous avez lancé la campagne "{{ campagne.name }}"</h2>
+		<div>
+			<p>Vous avez envoyé {{ campagne.destinataires|length }} emails</p>
+			<p>Pour suivre les info cliquer sur le bouton <a class=" action-statistic btn btn-primary btn-block w-30" href="{{ path('admin_stat', { uid: campagne.id }) }}" data-action-name="statistic"><i class="action-icon fas fa-chart-line"></i> Stat campagne</a> dans la liste des campagnes créées.</p>
+			<p>Pour finaliser la campagne, envoyer les emails d'informations auprès des destinataires qui ont réagi.</p>
+		</div>
+
+	{% else %}
+		<h2 class="text-center">Bienvenue sur le tableau de bord de SwordPhish</h2>
+		{% for error in app.flashes('error') %}
+			<div class="alert alert-danger" role="alert">
+				{{ error }}
+			</div>
+		{% endfor %}
+
 	{% endif %}
 
-	<h2 class="text-center">Bienvenue sur le tableau de bord de SwordPhish</h2>
 
 {% endblock %}

@@ -20,6 +20,7 @@ class DashboardController extends AbstractDashboardController
     {
         return $this->render('admin/index.html.twig',[
             'test_envoi' => false,
+            'stat' => false,
         ]);
     }
 

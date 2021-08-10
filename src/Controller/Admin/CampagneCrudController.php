@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -46,7 +47,7 @@ class CampagneCrudController extends AbstractCrudController
                 }
                 return $isDisplayed;
             })
-            ->linkToRoute('admin_email_envoi', function (Campagne $campagne) {
+            ->linkToRoute('admin_email_campagne', function (Campagne $campagne) {
                 return [
                     'uid' => $campagne->getId(),
                 ];
@@ -64,7 +65,7 @@ class CampagneCrudController extends AbstractCrudController
                 }
                 return $isDisplayed;
             })
-            ->linkToRoute('admin_email_envoi', function (Campagne $campagne) {
+            ->linkToRoute('admin_email_campagne', function (Campagne $campagne) {
                 return [
                     'uid' => $campagne->getId(),
                 ];
@@ -78,14 +79,21 @@ class CampagneCrudController extends AbstractCrudController
             ->linkToRoute('admin_email_test', function (Campagne $campagne) {
                 return ['uid' => $campagne->getId(),];
             })
-            ->addCssClass('btn btn-success btn-block w-30')
-            ;
+            ->addCssClass('btn btn-success btn-block w-30');
         // bouton pour afficher les stats
         $statistic = Action::new('statistic', 'Stat campagne', 'fas fa-chart-line')
-            ->linkToRoute('admin', [])
-            ->addCssClass('btn btn-primary btn-block w-30')
-            ;
-        
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if ($campagne->getIsSent()) {
+                    $isDisplayed = true;
+                }
+                return $isDisplayed;
+            })
+            ->linkToRoute('admin_stat', function (Campagne $campagne) {
+                return ['uid' => $campagne->getId(),];
+            })
+            ->addCssClass('btn btn-primary btn-block w-30');
+
         return $actions
             ->add(Crud::PAGE_INDEX, $sendEmail)
             ->add(Crud::PAGE_INDEX, $sendInfo)
@@ -110,5 +118,7 @@ class CampagneCrudController extends AbstractCrudController
                 'widget' => 'single_text',
             ])
             ->hideOnForm();
+        yield BooleanField::new('isSent')
+            ->onlyOnForms();
     }
 }

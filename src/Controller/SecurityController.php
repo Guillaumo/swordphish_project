@@ -27,6 +27,7 @@ class SecurityController extends AbstractController
             'last_username' => $lastUsername, 
             'error' => $error,
             'test_envoi' => false,
+            'stat' => false,
         ]);
     }
 
