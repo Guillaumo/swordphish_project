@@ -65,7 +65,7 @@ class CampagneCrudController extends AbstractCrudController
                 }
                 return $isDisplayed;
             })
-            ->linkToRoute('admin_email_campagne', function (Campagne $campagne) {
+            ->linkToRoute('admin_email_infos', function (Campagne $campagne) {
                 return [
                     'uid' => $campagne->getId(),
                 ];

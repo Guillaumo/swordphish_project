@@ -1,0 +1,84 @@
+<html>
+	<body>
+		<div style="width:642.0pt; mso-cellspacing:1.5pt;mso-yfti-tbllook:1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt">
+			<p style="font-size: 1.5em;">
+				Bonjour,
+				<br>
+				<br>
+				Nous vous annonçons que nous avons lancé une campagne de "phishing" ou "hameçonnage" auprès du personnel d'Abalone sur tout le territoire ayant pour but la prévention des risques en matière de sécurité informatique.
+				<br>
+				Vous avez dû recevoir un email ayant l'apparence d'un email conforme d'Abalone vous demandant à cliquer sur un lien pour gagner des places de cinéma.
+				<br>
+				Une fois le lien cliqué, vous êtes tombé sur une page web ayant l'apprence d'une page web conforme d'Abalone, vous invitant à remplir un formulaire et à l'envoyer.
+				<br>
+				<br>
+				Si vous recevez cet email, c'est que vous avez au moins cliqué sur le lien.<br>
+				Et voici les informations que nous avons recueilli :
+				<br>
+			</p>
+			<ul style="font-weight: bold; font-size: 1.5em;">
+				<li>Votre adresse IP :
+					{{ result_campaign_user.userip }}</li>
+				<li>Votre login de session :
+					{{ result_campaign_user.username }}</li>
+				<li>Votre nom de machine :
+					{{ result_campaign_user.hostname }}</li>
+				<li>Votre navigateur :
+					{{ result_campaign_user.navigator }}</li>
+			</ul>
+
+			{% if result_campaign_user.lastname is null %}
+				<p style="font-size: 1.5em;">
+					Vous n'avez pas ou pas encore envoyé le formulaire comme il vous a été demandé pour gagner des places de cinéma.
+					<br>
+					Vous n'avez donc pas diffusé d'autres informations plus personnelles.
+				</p>
+
+			{% else %}
+				<p style="font-size: 1.5em;">
+					<strong>{{ result_campaign_user.firstname }}
+						{{ result_campaign_user.lastname }}</strong>, vous avez rempli et envoyé le formulaire comme il vous a été demandé pour gagner des places de cinéma.
+					<br>
+					Vous avez donc diffusé d'autres informations plus personnelles :
+					<br>
+				</p>
+				<ul style="font-weight: bold; font-size: 1.5em;">
+					<li>Votre nom :
+						{{ result_campaign_user.lastname }}</li>
+					<li>Votre prénom :
+						{{ result_campaign_user.firstname }}</li>
+					<li>Votre téléphone :
+						{{ result_campaign_user.telephone }}</li>
+					<li>Votre email :
+						{{ result_campaign_user.email }}</li>
+				</ul>
+
+			{% endif %}
+
+			<p style="font-size: 1.5em;">
+				Toutes ces informations diffusées peuvent être utilisés par des personnes mal intentionnées avec l'objectif de vouloir nuire.<br>
+				Nous vous invitons à lire les articles ci-dessous provenant de l'ANSSI (Agence nationale de la sécurité des systèmes d'information) pour vous informez ce qu'est le "phishing" et vous donnez des pistes pour éviter de vous faire "hameçonner".<br>
+				<span style="font-style: italic;">- vous pouvez cliquer sur les liens ci-dessous sans rique :) -</span><br>
+				Sinon, n'hésitez pas à nous contacter pour tout complément d'informations.
+			</p>
+
+			<article>
+				<p style="font-size: 1.5em;">
+					<strong>Selon l'ANSSI (Agence nationale de la sécurité des systèmes d'information) :</strong><br>
+					L’hameçonnage reste l’un des principaux vecteurs de la cybercriminalité.<br>
+					Ce type d’attaque vise à obtenir du destinataire d’un courriel d’apparence légitime qu’il transmette ses coordonnées bancaires ou ses identifiants de connexion à des services financiers, afin de lui dérober de l’argent.<br>
+					L’hameçonnage peut également être utilisé dans des
+					<a href="https://www.ssi.gouv.fr/administration/principales-menaces/lespionnage/lattaque-par-hameconnage-cible-spearphishing/">attaques plus ciblées</a>
+					pour essayer d’obtenir d’un employé ses identifiants d’accès aux réseaux professionnels auxquels il peut avoir accès.
+				</p>
+			</article>
+			<article>
+				<p style="font-weight: bold; font-size: 1.5rem;">
+                    5 réflexes à avoir lors de la réception d’un courriel :
+					<a href="https://www.ssi.gouv.fr/entreprise/precautions-elementaires/5-reflexes-a-avoir-lors-de-la-reception-duncourriel/">https://www.ssi.gouv.fr/entreprise/precautions-elementaires/5-reflexes-a-avoir-lors-de-la-reception-duncourriel/</a>
+				</p>
+			</article>
+		</div>
+	</body>
+	{% include './partials/signature_impro.html.twig' %}
+</html>

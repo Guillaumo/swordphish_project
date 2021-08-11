@@ -14,7 +14,7 @@
 
 {% block main %}
 
-	{% if test_envoi %}
+	{% if test_envoi is defined and test_envoi %}
 		<h2>Vous allez effectuer un test d'envoi d'emails pour la campagne
 			{{ campagne.name }}</h2>
 		<form name="form_email_address" method="POST" class="card-body">
@@ -32,7 +32,7 @@
 			</fieldset>
 		</form>
 
-	{% elseif stat %}
+	{% elseif stat is defined and stat %}
 		<h2 class="text-center">Statistiques de la campagne
 			"{{ campaign.name }}"
 			du
@@ -48,11 +48,11 @@
 			let data_submits = {{ data_submits|raw }};
 		</script>
 
-	{% elseif campagne.isSent %}
+	{% elseif campagne.isSent is defined %}
 		<h2 class="text-center">Vous avez lancé la campagne "{{ campagne.name }}"</h2>
 		<div>
 			<p>Vous avez envoyé {{ campagne.destinataires|length }} emails</p>
-			<p>Pour suivre les info cliquer sur le bouton <a class=" action-statistic btn btn-primary btn-block w-30" href="{{ path('admin_stat', { uid: campagne.id }) }}" data-action-name="statistic"><i class="action-icon fas fa-chart-line"></i> Stat campagne</a> dans la liste des campagnes créées.</p>
+			<p>Pour suivre les info cliquer sur le bouton <a class=" action-statistic btn btn-primary btn-block w-30" href="{{ ea_url().setRoute('admin_stat', { uid: campagne.id }) }}" data-action-name="statistic"><i class="action-icon fas fa-chart-line"></i> Stat campagne</a> dans la liste des campagnes créées.</p>
 			<p>Pour finaliser la campagne, envoyer les emails d'informations auprès des destinataires qui ont réagi.</p>
 		</div>
 

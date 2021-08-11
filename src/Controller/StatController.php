@@ -49,7 +49,6 @@ class StatController extends AbstractController
         // Envoi des data à la vue
         return $this->render('admin/index.html.twig',[
             'stat' => true,
-            'test_envoi' => false,
             'campaign' => $campagne,
             'data_clicks' => json_encode([$num_emails,$num_clicks]),
             'data_submits' => json_encode([$num_clicks, $num_submits]),
