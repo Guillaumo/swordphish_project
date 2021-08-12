@@ -135,7 +135,7 @@ class EmailController extends AbstractController
 
         return $this->render('admin/index.html.twig', [
             'campagne' => $campagne,
-            'num_dest' => count($destinataireRepository->findByCampagneField([$campagne])),
+            // 'num_dest' => count($destinataireRepository->findByCampagneField([$campagne])),
         ]);
     }
 
@@ -144,19 +144,12 @@ class EmailController extends AbstractController
      */
     public function sendEmailInfos($uid, CampagneRepository $campagneRepository,MailerInterface $mailer, EntityManagerInterface $em): Response
     {
-        // ini_set('max_execution_time', 0);
         // on récupère l'objet de la campagne sélectionnée pour l'envoi
         $campagne = $campagneRepository->findOneBy(['id' => $uid]);
         // on récupère les résultats de la campagne lancée
         $results = $campagne->getResults();
-        // on récupère les destinataires concernés
-        // $destinataires = [];
-        // foreach ($results as $result)
-        // {
-        //     $destinataires [] = $result->getDestinataire();
-        // }
         
-        // Envoi email au groupe de destinataires
+        // Envoi email aux destinataires ayant au moins cliqué sur le lien
         foreach ($results as $result) {
             // on récupère l'adresse email du destinataire
             $address = $result->getDestinataire()->getEmail();
@@ -185,14 +178,14 @@ class EmailController extends AbstractController
         }
 
 
-        // on met à jour le champ isSent de la campagne à true
-        // $campagne->setIsSent(true);
-        // $em->persist($campagne);
-        // $em->flush();
+        // on met à jour le champ isInfoSent de la campagne à true
+        $campagne->setIsInfoSent(true);
+        $em->persist($campagne);
+        $em->flush();
 
         return $this->render('admin/index.html.twig', [
             'campagne' => $campagne,
-            
+            'results' => $results,
         ]);
     }
 }

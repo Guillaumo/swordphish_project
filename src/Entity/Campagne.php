@@ -48,11 +48,23 @@ class Campagne
      */
     private $isSent;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isEnable;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isInfoSent;
+
     public function __construct()
     {
         $this->destinataires = new ArrayCollection();
         $this->results = new ArrayCollection();
         $this->isSent = false;
+        $this->isEnable = true;
+        $this->isInfoSent = false;
     }
 
     public function getId(): ?int
@@ -161,6 +173,30 @@ class Campagne
     public function setIsSent(bool $isSent): self
     {
         $this->isSent = $isSent;
+
+        return $this;
+    }
+
+    public function getIsEnable(): ?bool
+    {
+        return $this->isEnable;
+    }
+
+    public function setIsEnable(bool $isEnable): self
+    {
+        $this->isEnable = $isEnable;
+
+        return $this;
+    }
+
+    public function getIsInfoSent(): ?bool
+    {
+        return $this->isInfoSent;
+    }
+
+    public function setIsInfoSent(bool $isInfoSent): self
+    {
+        $this->isInfoSent = $isInfoSent;
 
         return $this;
     }
