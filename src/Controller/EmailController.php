@@ -34,10 +34,12 @@ class EmailController extends AbstractController
     {
         // On récupère l'objet campagne correspondant à l'id transmis
         $campagne = $campagneRepository->findOneBy(['id' => $uid]);
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['submit'])) 
+        {
             // récupération des adresses emails pour le test d'envoi
             $addresses = explode(',', $_POST['email_address']);
-            foreach ($addresses as $address) {
+            foreach ($addresses as $address) 
+            {
                 // création d'un nouvel email pour le test d'envoi
                 $email = (new TemplatedEmail())
                 ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
@@ -53,7 +55,7 @@ class EmailController extends AbstractController
                 ->context([
                     'id_campagne' => $uid,
                     'id_destinataire' => $address,
-                    'route' => 'admin_email_test',
+                    'isTest' => true,
                 ]);
 
                 $mailer->send($email);
@@ -109,7 +111,7 @@ class EmailController extends AbstractController
                     ->context([
                         'id_campagne' => $uid,
                         'id_destinataire' => $destinataire->getId(),
-                        'route' => 'admin_email_campagne',
+                        'isTest' => false,
                     ]);
 
                 try {

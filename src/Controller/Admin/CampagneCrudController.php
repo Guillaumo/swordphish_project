@@ -48,6 +48,8 @@ class CampagneCrudController extends AbstractCrudController
             $campagne->setIsEnable(false);
         } else {
             $campagne->setIsEnable(true);
+            $campagne->setIsSent(false);
+            $campagne->setIsInfoSent(false);
         }
         // on met à jour le champ isEnable de la campagne selon le cas
         $em->persist($campagne);
@@ -207,6 +209,8 @@ class CampagneCrudController extends AbstractCrudController
         yield BooleanField::new('isEnable', 'Campagne activée')
             ->onlyOnForms();
         yield BooleanField::new('isSent', 'Campagne envoyée')
+            ->onlyOnForms();
+        yield BooleanField::new('isInfoSent', 'Infos envoyés')
             ->onlyOnForms();
     }
 }
