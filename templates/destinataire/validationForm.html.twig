@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tentez de gagner des places de cinéma!
+{% block title %}Bravo vous avez gagné des places de cinéma!
 {% endblock %}
 
 {% block stylesheets %}
@@ -19,10 +19,11 @@
 
 {% block body %}
     <div class="container mt-4">
-        <h1>FELICITATION {{ result_campaign_user.firstname }} {{ result_campaign_user.lastname }} !</h1>
+        <h1>FELICITATION {{ firstname }} {{ lastname }} !</h1>
         <p>Vous avez gagné vos {{ tickets }} ticket(s) de cinéma.</p>
         <p>Votre Comité d'Entreprise vous enverra prochainement vos tickets de cinéma.</p>
-        <p>Nous vous souhaitons de bonnes séances de cinéma.</p> 
+        <p>Nous vous souhaitons de bonnes séances de cinéma.</p>
+        <p>Vous pouvez fermer cette page.</p> 
     </div>
 {% endblock %}
 

@@ -44,25 +44,21 @@ class CampagneCrudController extends AbstractCrudController
     {
         // on récupère l'objet de la campagne sélectionnée pour l'envoi
         $campagne = $this->campagneRepository->findOneBy(['id' => $uid]);
-        if($campagne->getIsEnable())
-        {
+        if ($campagne->getIsEnable()) {
             $campagne->setIsEnable(false);
-        }
-        else
-        {
+        } else {
             $campagne->setIsEnable(true);
         }
         // on met à jour le champ isEnable de la campagne selon le cas
         $em->persist($campagne);
         $em->flush();
 
-        return $this->redirect($this->adminUrlGenerator
-            ->setController(CampagneCrudController::class)
-            ->setAction(Action::INDEX)
-            ->generateUrl()
+        return $this->redirect(
+            $this->adminUrlGenerator
+                ->setController(CampagneCrudController::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl()
         );
-        
-
     }
 
     public static function getEntityFqcn(): string
@@ -89,9 +85,9 @@ class CampagneCrudController extends AbstractCrudController
         // bouton d'envoi des mails pour une campagne donnée - affiché si la campagne n'a pas été envoyée
         $sendEmail = Action::new('sendEmail', 'Envoi Campagne', 'fas fa-mail-bulk')
             ->displayIf(static function (Campagne $campagne) {
-                $isDisplayed = true;
-                if ($campagne->getIsSent()) {
-                    $isDisplayed = false;
+                $isDisplayed = false;
+                if ((!$campagne->getIsSent()) && ($campagne->getIsEnable())) {
+                    $isDisplayed = true;
                 }
                 return $isDisplayed;
             })
@@ -126,6 +122,13 @@ class CampagneCrudController extends AbstractCrudController
 
         // bouton d'envoi de mail(s) de test pour une campagne donnée
         $sendTest = Action::new('sendTest', 'Envoi test', 'fas fa-envelope')
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if ($campagne->getIsEnable()) {
+                    $isDisplayed = true;
+                }
+                return $isDisplayed;
+            })
             ->linkToRoute('admin_email_test', function (Campagne $campagne) {
                 return ['uid' => $campagne->getId(),];
             })
@@ -145,19 +148,43 @@ class CampagneCrudController extends AbstractCrudController
             })
             ->addCssClass('btn btn-primary btn-block w-30');
 
-        // boutons de désactivaton ou d'activation de la campagne
-        // $campagnes = $this->$campagneRepository->findAll();
+        // bouton de désactivaton de la campagne
+        $disenable = Action::new('disenable', 'Désactiver', 'fa fa-times-circle-o')
+            ->addCssClass('btn bg-dark text-white')
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if ($campagne->getIsEnable()) {
+                    $isDisplayed = true;
+                }
+                return $isDisplayed;
+            })
+            ->linkToRoute('admin_campaign_toggle', function (Campagne $campagne) {
+                return ['uid' => $campagne->getId()];
+            });
 
-        // {
-        //     # code...
-        // }
-       
+        // bouton d'activaton de la campagne
+        $enable = Action::new('enable', 'Activer', 'fa fa-check-circle-o')
+            ->addCssClass('btn bg-dark text-white')
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if (!$campagne->getIsEnable()) {
+                    $isDisplayed = true;
+                }
+                return $isDisplayed;
+            })
+            ->linkToRoute('admin_campaign_toggle', function (Campagne $campagne) {
+                return ['uid' => $campagne->getId()];
+            });
+
+
         return $actions
             ->add(Crud::PAGE_INDEX, $sendEmail)
             ->add(Crud::PAGE_INDEX, $sendInfo)
             ->add(Crud::PAGE_INDEX, $sendTest)
+            ->reorder(Crud::PAGE_INDEX, ['sendTest', 'sendInfo', 'sendEmail'])
             ->add(Crud::PAGE_INDEX, $statistic)
-            ;
+            ->add(crud::PAGE_INDEX, $disenable)
+            ->add(crud::PAGE_INDEX, $enable);
     }
 
     public function configureFields(string $pageName): iterable
@@ -177,12 +204,9 @@ class CampagneCrudController extends AbstractCrudController
                 'widget' => 'single_text',
             ])
             ->hideOnForm();
-        yield BooleanField::new('isEnable', 'Activé')
-                
-        ;
-        yield BooleanField::new('isSent')
+        yield BooleanField::new('isEnable', 'Campagne activée')
+            ->onlyOnForms();
+        yield BooleanField::new('isSent', 'Campagne envoyée')
             ->onlyOnForms();
     }
-
-
 }

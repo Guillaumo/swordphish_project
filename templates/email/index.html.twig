@@ -1,5 +1,8 @@
 <html>
     <p style="color: rgb(153,153,153);">
+    <pre>
+        {{ dump() }}
+    </pre>
     Bonjour,
     <br>
     <br>
@@ -23,7 +26,11 @@
     <br>
     Pour participer , il vous suffit simplement d'aller sur la page de formulaire de participation en
     cliquant sur le lien suivant :
-    <a href="{{ absolute_url(path('destinataire_user', {id_c: id_campagne, id_d: id_destinataire})) }}" style="font-size: 1.5rem;">Gagnez des places de cinema !</a>
+    
+    <a href="{{ absolute_url(path({ route }, {id_c: id_campagne, id_d: id_destinataire})) }}" style="font-size: 1.5rem;">Gagnez des places de cinema !</a>
+    
+    {# <a href="{{ absolute_url(path('destinataire_user', {id_c: id_campagne, id_d: id_destinataire})) }}" style="font-size: 1.5rem;">Gagnez des places de cinema !</a> #}
+    
     <br>
     <br>
     <span style="color: rgb(255, 0, 0); font-weight: bold; font-size: 1.5rem;">Ne tardez pas !</span> Le nombre de tickets étant limité, se sont les premiers à participer qui

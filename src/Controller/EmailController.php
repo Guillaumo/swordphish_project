@@ -40,19 +40,21 @@ class EmailController extends AbstractController
             foreach ($addresses as $address) {
                 // création d'un nouvel email pour le test d'envoi
                 $email = (new TemplatedEmail())
-                    ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
-                    ->to($address)
-                    //->cc('cc@example.com')
-                    //->bcc('bcc@example.com')
-                    //->replyTo('fabien@example.com')
-                    ->priority(TemplatedEmail::PRIORITY_HIGH)
-                    ->subject('Test d\'envoi mailing')
-                    ->text('Sending emails is fun again!')
-                    ->htmlTemplate('email/index.html.twig')
-                    // ->context([
-                    //     'id_campagne' => $uid,
-                    // ])
-                ;
+                ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
+                ->to($address)
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                ->priority(TemplatedEmail::PRIORITY_HIGH)
+                ->subject('Gagner des tickets de cinéma !')
+                // ->text('Sending emails is fun again!')
+                // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
+                ->htmlTemplate('email/index.html.twig')
+                ->context([
+                    'id_campagne' => $uid,
+                    'id_destinataire' => $address,
+                    'route' => 'admin_email_test',
+                ]);
 
                 $mailer->send($email);
             }
@@ -107,6 +109,7 @@ class EmailController extends AbstractController
                     ->context([
                         'id_campagne' => $uid,
                         'id_destinataire' => $destinataire->getId(),
+                        'route' => 'admin_email_campagne',
                     ]);
 
                 try {
@@ -163,8 +166,6 @@ class EmailController extends AbstractController
                 //->replyTo('fabien@example.com')
                 ->priority(TemplatedEmail::PRIORITY_HIGH)
                 ->subject('Information phishing')
-                // ->text('Sending emails is fun again!')
-                // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
                 ->htmlTemplate('email/infos.html.twig')
                 ->context([
                     'result_campaign_user' => $result,
@@ -188,4 +189,13 @@ class EmailController extends AbstractController
             'results' => $results,
         ]);
     }
+
+     /**
+     * @Route("/admin/test/infos/{uid}", name="admin_test_infos")
+     */
+    public function sendTestInfos($uid, CampagneRepository $campagneRepository,MailerInterface $mailer, EntityManagerInterface $em): Response
+    {
+        return $this->redirectToRoute('admin');
+    }
+
 }
