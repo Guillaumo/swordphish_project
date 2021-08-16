@@ -38,7 +38,7 @@
 // xhr.send("variable1=width_screen&variable2=height_screen");
 
 //******************************************************************************
-// Création d' un element div ( Merci à Coucou747 )
+// Création d'un élément div
 //******************************************************************************
 // const box = document.createElement('div');
 // document.body.appendChild(box); // On envoie le tout

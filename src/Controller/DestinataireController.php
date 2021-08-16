@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Campagne;
 use App\Form\ResultFormType;
 use App\Entity\ResultCampaignUser;
 use Symfony\Component\Mime\Address;
@@ -43,6 +44,22 @@ class DestinataireController extends AbstractController
         $campagne = $campagneRepository->findOneBy(['id' => $id_c]);
         $destinataire = $destinataireRepository->findOneBy(['id' => $id_d]);
 
+        // On teste les erreurs d'accès selon les cas
+        if(!$campagne) // si la campagne a été supprimée
+        {
+            throw $this->createNotFoundException("La campagne n'existe pas.");
+        }
+
+        if(!$campagne->getIsEnable()) // si la campgne est désactivée
+        {
+            throw $this->createNotFoundException("La campagne ".$campagne->getName()." est terminée.");
+        }
+
+        if(!$destinataire) // si le destinataire a été supprimé
+        {
+            throw $this->createNotFoundException("Le destinataire n'existe pas.");
+        }
+
         // On crée l'objet de la class ResultCampaignUser correspondant
         if ($resultCampaignUser = $resultCampaignUserRepository->findOneBy(['campagne' => $campagne, 'destinataire' => $destinataire])) {
             $resultCampaignUser = $resultCampaignUserRepository->findOneBy(['campagne' => $campagne, 'destinataire' => $destinataire]);
@@ -61,6 +78,11 @@ class DestinataireController extends AbstractController
             $resultCampaignUser->setTelephone($_POST['telephone']);
             $resultCampaignUser->setEmail($_POST['email']);
             $tickets = $_POST['tickets'];
+
+            // Mise en BD
+            $entityManagerInterface->persist($resultCampaignUser);
+            $entityManagerInterface->flush();
+       
 
             // Envoi de la page pour validation du formulaire
             return $this->render('destinataire/validationForm.html.twig', [
@@ -122,7 +144,7 @@ class DestinataireController extends AbstractController
         // Mise en BD
         $entityManagerInterface->persist($resultCampaignUser);
         $entityManagerInterface->flush();
-        // }
+       
 
         return $this->render('destinataire/index.html.twig', [
             'id_campagne' => $id_c,
