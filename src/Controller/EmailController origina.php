@@ -34,27 +34,29 @@ class EmailController extends AbstractController
     {
         // On récupère l'objet campagne correspondant à l'id transmis
         $campagne = $campagneRepository->findOneBy(['id' => $uid]);
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['submit'])) 
+        {
             // récupération des adresses emails pour le test d'envoi
             $addresses = explode(',', $_POST['email_address']);
-            foreach ($addresses as $address) {
+            foreach ($addresses as $address) 
+            {
                 // création d'un nouvel email pour le test d'envoi
                 $email = (new TemplatedEmail())
-                    ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
-                    ->to($address)
-                    //->cc('cc@example.com')
-                    //->bcc('bcc@example.com')
-                    //->replyTo('fabien@example.com')
-                    ->priority(TemplatedEmail::PRIORITY_HIGH)
-                    ->subject('Gagner des tickets de cinéma !')
-                    // ->text('Sending emails is fun again!')
-                    // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
-                    ->htmlTemplate('email/index.html.twig')
-                    ->context([
-                        'id_campagne' => $uid,
-                        'id_destinataire' => $address,
-                        'isTest' => true,
-                    ]);
+                ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
+                ->to($address)
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                ->priority(TemplatedEmail::PRIORITY_HIGH)
+                ->subject('Gagner des tickets de cinéma !')
+                // ->text('Sending emails is fun again!')
+                // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
+                ->htmlTemplate('email/index.html.twig')
+                ->context([
+                    'id_campagne' => $uid,
+                    'id_destinataire' => $address,
+                    'isTest' => true,
+                ]);
 
                 $mailer->send($email);
             }
@@ -73,7 +75,7 @@ class EmailController extends AbstractController
      */
     public function sendEmailCampagne($uid, CampagneRepository $campagneRepository, DestinataireRepository $destinataireRepository, MailerInterface $mailer, EntityManagerInterface $em): Response
     {
-        
+        ini_set('max_execution_time', 0);
         // on récupère l'objet de la campagne sélectionnée pour l'envoi
         $campagne = $campagneRepository->findOneBy(['id' => $uid]);
         // on récupère les destinataires de la campagne sélectionnée rangés aléatoirement
@@ -85,11 +87,40 @@ class EmailController extends AbstractController
         // Longueur du tableau des destinataires
         $count = count($destinataires);
         // On boucle sur l'ensemble des destinataires pour former les groupes d'envoi
-        $groups = [];
         while ($count > 0) {
             // on sélectionne un groupe de destinataires
             $group_dest = array_slice($destinataires, 0, $nb_destinataires);
-            array_push($groups, $group_dest);
+
+            // Envoi email au groupe de destinataires
+            foreach ($group_dest as $destinataire) {
+                // on récupère l'adresse email du destinataire
+                $address = $destinataire->getEmail();
+
+                // création d'un nouvel email pour l'envoi vers chaque destinataire
+                $email = (new TemplatedEmail())
+                    ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
+                    ->to($address)
+                    //->cc('cc@example.com')
+                    //->bcc('bcc@example.com')
+                    //->replyTo('fabien@example.com')
+                    ->priority(TemplatedEmail::PRIORITY_HIGH)
+                    ->subject('Gagner des tickets de cinéma !')
+                    // ->text('Sending emails is fun again!')
+                    // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
+                    ->htmlTemplate('email/index.html.twig')
+                    ->context([
+                        'id_campagne' => $uid,
+                        'id_destinataire' => $destinataire->getId(),
+                        'isTest' => false,
+                    ]);
+
+                try {
+                    $mailer->send($email);
+                } catch (TransportExceptionInterface $mailerException) {
+                    throw $mailerException;
+                }
+            }
+
             if (count($group_dest) >= $count) {
                 break;
             }
@@ -97,59 +128,18 @@ class EmailController extends AbstractController
             $destinataires = array_values(array_diff($destinataires, $group_dest));
             // on vérifie la longueur du tableau de destinataires restants
             $count = count($destinataires);
+
+            // On suspend le script avant de passer au groupe suivant, en nombre de secondes
+            sleep($interval * 60);
         }
 
-        // on récupère l'index du groupe de destinataires pour l'envoi à partir du script js
-        if (isset($_POST['index'])) {
-            $index = $_POST['index'];
-        } else {
-            $index = 0;
-        }
-
-        // Envoi email au groupe de destinataires
-        foreach ($groups[$index] as $destinataire) {
-            // on récupère l'adresse email du destinataire
-            $address = $destinataire->getEmail();
-
-            // création d'un nouvel email pour l'envoi vers chaque destinataire
-            $email = (new TemplatedEmail())
-                ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
-                ->to($address)
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                ->priority(TemplatedEmail::PRIORITY_HIGH)
-                ->subject('Gagner des tickets de cinéma !')
-                // ->text('Sending emails is fun again!')
-                // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
-                ->htmlTemplate('email/index.html.twig')
-                ->context([
-                    'id_campagne' => $uid,
-                    'id_destinataire' => $destinataire->getId(),
-                    'isTest' => false,
-                ]);
-
-            try {
-                $mailer->send($email);
-            } catch (TransportExceptionInterface $mailerException) {
-                throw $mailerException;
-            }
-        }
-
-        // si tous les groupes de destinataires sont envoyés
-        if ($index == count($groups[$index]) - 1) {
-
-            // on met à jour le champ isSent de la campagne à true
-            $campagne->setIsSent(true);
-            $em->persist($campagne);
-            $em->flush();
-        }
+        // on met à jour le champ isSent de la campagne à true
+        $campagne->setIsSent(true);
+        $em->persist($campagne);
+        $em->flush();
 
         return $this->render('admin/index.html.twig', [
             'campagne' => $campagne,
-            'index' => $index,
-            'index_max' => count($groups[$index]) - 1,
-            'counter' => 5,
             // 'num_dest' => count($destinataireRepository->findByCampagneField([$campagne])),
         ]);
     }
@@ -157,13 +147,13 @@ class EmailController extends AbstractController
     /**
      * @Route("/admin/email/infos/{uid}", name="admin_email_infos")
      */
-    public function sendEmailInfos($uid, CampagneRepository $campagneRepository, MailerInterface $mailer, EntityManagerInterface $em): Response
+    public function sendEmailInfos($uid, CampagneRepository $campagneRepository,MailerInterface $mailer, EntityManagerInterface $em): Response
     {
         // on récupère l'objet de la campagne sélectionnée pour l'envoi
         $campagne = $campagneRepository->findOneBy(['id' => $uid]);
         // on récupère les résultats de la campagne lancée
         $results = $campagne->getResults();
-
+        
         // Envoi email aux destinataires ayant au moins cliqué sur le lien
         foreach ($results as $result) {
             // on récupère l'adresse email du destinataire
@@ -202,11 +192,12 @@ class EmailController extends AbstractController
         ]);
     }
 
-    /**
+     /**
      * @Route("/admin/test/infos/{uid}", name="admin_test_infos")
      */
-    public function sendTestInfos($uid, CampagneRepository $campagneRepository, MailerInterface $mailer, EntityManagerInterface $em): Response
+    public function sendTestInfos($uid, CampagneRepository $campagneRepository,MailerInterface $mailer, EntityManagerInterface $em): Response
     {
         return $this->redirectToRoute('admin');
     }
+
 }

@@ -8,7 +8,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 	<script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js" defer></script>
 	<script src="{{ asset('js/chart.js') }}" defer></script>
-	<script src="{{ asset('js/counter.js') }}" defer></script>
 {% endblock %}
 
 {% block main %}
@@ -48,22 +47,12 @@
 		</script>
 
 	{% elseif campagne.isSent is defined and not campagne.isInfoSent %}
-	
-			<h2 class="text-center">Vous avez lancé la campagne "{{ campagne.name }}"</h2>
-			<div id='bip'></div>
-			<div class="h5 mt-4">
-				<p>Vous avez envoyé {{ campagne.destinataires|length }} emails</p>
-				<p>Pour suivre les stats cliquer sur le bouton <a class=" action-statistic btn btn-primary btn-block w-30" href="{{ ea_url().setRoute('admin_stat', { uid: campagne.id }) }}" data-action-name="statistic"><i class="action-icon fas fa-chart-line"></i> Stat campagne</a> dans la liste des campagnes créées.</p>
-				<p>Pour finaliser la campagne, envoyer les emails d'informations auprès des destinataires qui ont réagi en cliquant sur le bouton <a class=" action-sendInfo btn btn-warning btn-block w-30" href="{{ ea_url().setRoute('admin_email_infos', { uid: campagne.id }) }}" onclick="return(confirm('Etes-vous sûr de vouloir envoyer les emails ?'));" data-action-name="sendInfo"><i class="action-icon fas fa-mail-bulk"></i> Envoi Infos</a>.</p>
-			</div>
-			<script type="text/javascript">
-				let index = {{ index }};
-				let index_max = {{ index_max }};
-				let counter = {{ counter }};
-				let url = new URL("{{ ea_url().setRoute('admin_email_campagne', { uid: campagne.id }) }}")
-				// let param_c = {{ campagne.id }};
-			</script>
-		
+		<h2 class="text-center">Vous avez lancé la campagne "{{ campagne.name }}"</h2>
+		<div class="h5 mt-4">
+			<p>Vous avez envoyé {{ campagne.destinataires|length }} emails</p>
+			<p>Pour suivre les stats cliquer sur le bouton <a class=" action-statistic btn btn-primary btn-block w-30" href="{{ ea_url().setRoute('admin_stat', { uid: campagne.id }) }}" data-action-name="statistic"><i class="action-icon fas fa-chart-line"></i> Stat campagne</a> dans la liste des campagnes créées.</p>
+			<p>Pour finaliser la campagne, envoyer les emails d'informations auprès des destinataires qui ont réagi en cliquant sur le bouton <a class=" action-sendInfo btn btn-warning btn-block w-30" href="{{ ea_url().setRoute('admin_email_infos', { uid: campagne.id }) }}" onclick="return(confirm('Etes-vous sûr de vouloir envoyer les emails ?'));" data-action-name="sendInfo"><i class="action-icon fas fa-mail-bulk"></i> Envoi Infos</a>.</p>
+		</div>
 
 	{% elseif campagne.isInfoSent is defined and campagne.isInfoSent %}
 		<h2 class="text-center">Campagne "{{ campagne.name }}"</h2>
