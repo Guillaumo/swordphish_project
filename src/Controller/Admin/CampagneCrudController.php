@@ -110,6 +110,9 @@ class CampagneCrudController extends AbstractCrudController
                 if (($campagne->getIsSent()) && ($campagne->getIsEnable())) {
                     $isDisplayed = true;
                 }
+                if($campagne->getIsInfoSent()) {
+                    $isDisplayed = false;
+                }
                 return $isDisplayed;
             })
             ->linkToRoute('admin_email_infos', function (Campagne $campagne) {
@@ -119,8 +122,9 @@ class CampagneCrudController extends AbstractCrudController
             })
             ->addCssClass('btn btn-warning btn-block w-30')
             ->setHtmlAttributes([
-                'onclick' => "return(confirm('Etes-vous sûr de vouloir envoyer les emails ?'));"
-            ]);
+                'onclick' => "return(confirm('Etes-vous sûr de vouloir envoyer les emails d'infos ?'));"
+            ])
+            ;
 
         // bouton d'envoi de mail(s) de test pour une campagne donnée
         $sendTest = Action::new('sendTest', 'Envoi test', 'fas fa-envelope')
@@ -180,13 +184,14 @@ class CampagneCrudController extends AbstractCrudController
 
 
         return $actions
+            ->add(Crud::PAGE_INDEX, $statistic)
             ->add(Crud::PAGE_INDEX, $sendEmail)
             ->add(Crud::PAGE_INDEX, $sendInfo)
             ->add(Crud::PAGE_INDEX, $sendTest)
-            ->reorder(Crud::PAGE_INDEX, ['sendTest', 'sendInfo', 'sendEmail'])
-            ->add(Crud::PAGE_INDEX, $statistic)
             ->add(crud::PAGE_INDEX, $disenable)
-            ->add(crud::PAGE_INDEX, $enable);
+            ->add(crud::PAGE_INDEX, $enable)
+            ->reorder(Crud::PAGE_INDEX, ['enable', 'disenable', 'sendTest', 'sendInfo', 'sendEmail', 'statistic'])
+            ;
     }
 
     public function configureFields(string $pageName): iterable

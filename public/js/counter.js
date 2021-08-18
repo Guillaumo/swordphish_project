@@ -1,77 +1,57 @@
-// let counter = data;
+"use strict";
+
+document.getElementById("after").style.display = "none";
+
 let intervalId = null;
 
-// window.addEventListener("load", function(event) {
-//     start();
-// });
+let div = document.getElementById("form");
 
-function sendDataToPhp() {
-    // Création de l'objet XMLHttpRequest
-    let xhr = getXMLHttpRequest();
+let p1 = document.createElement("p");
+p1.textContent = 'Envoi encours du groupe de destinataires n° ' + index;
+div.appendChild(p1);
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                // let response = JSON.parse(xhr.responseText);
-                let response = xhr.responseText;
-                alert('Envoi n° '+ response.index + 1 + ' parti');
-                index = response.index + 1;
-                counter = response.counter;
-                if(index <= index_max)
-                {
-                    return start();
-                }
-            } else {
-                alert('Un problème est survenu avec la requête.');
-            }
-        }
-        console.log("xhr2: ", xhr, 'état : ',xhr.readyState);
-    };
+let p2 = document.createElement("p");
+p2.setAttribute('id','bip');
+p2.setAttribute('class','bg-danger');
+div.appendChild(p2);
 
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    
-    xhr.send('index =' + encodeURIComponent(index));
+let form = document.createElement("form");
+form.setAttribute('id','form_index');
+form.setAttribute('name','form_index');
+form.setAttribute('method','POST');
+div.appendChild(form);
 
-    console.log("xhr1: ", xhr, 'état : ',xhr.readyState);
-}
+let input = document.createElement("input");
+input.setAttribute('name','index');
+input.setAttribute('type','hidden');
+input.setAttribute('value',index);
+form.appendChild(input);
+
+
 
 function finish() {
     clearInterval(intervalId);
-    document.getElementById("bip").innerHTML = "Nouvel envoi";
+    document.getElementById("bip").innerHTML = 'Envoi du groupe de destinataires n° '+ (index+1)+ ' va partir';
+    // alert('Envoi n° '+ (index+1)+ ' prêt à partir');
+    setTimeout(() => { document.forms["form_index"].submit(); }, 2000);
+    
+    
 
-    return sendDataToPhp();
 }
 
 function bip() {
     counter--;
     if (counter == 0) finish();
     else {
-        document.getElementById("bip").innerHTML = counter + " secondes restantes";
+        document.getElementById("bip").innerHTML = counter + " secondes avant prochain envoi";
     }
 }
-
 
 (function() {
+    if (index>index_max) {
+        document.getElementById("form").style.display = "none";
+        document.getElementById("after").style.display = "block";
+        return;
+    }
     intervalId = setInterval(bip, 1000);
 } ())
-
-function getXMLHttpRequest() {
-    let xhr = null;
-
-    if (window.XMLHttpRequest || window.ActiveXObject) {
-        if (window.ActiveXObject) {
-            try {
-                xhr = new ActiveXObject("Msxml2.XMLHTTP");
-            } catch (e) {
-                xhr = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-        } else {
-            xhr = new XMLHttpRequest();
-        }
-    } else {
-        alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
-        return null;
-    }
-    return xhr;
-}

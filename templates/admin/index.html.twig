@@ -1,7 +1,7 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
 {% block stylesheets %}
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 {% endblock %}
 
 {% block javascripts %}
@@ -33,8 +33,8 @@
 
 	{% elseif stat is defined and stat %}
 		<h2 class="text-center">Statistiques de la campagne
-			"{{ campaign.name }}"
-			du
+						"{{ campaign.name }}"
+						du
 			{{ campaign.date|format_datetime('short', 'none') }}</h2>
 
 		<div class="row">
@@ -48,29 +48,40 @@
 		</script>
 
 	{% elseif campagne.isSent is defined and not campagne.isInfoSent %}
-	
-			<h2 class="text-center">Vous avez lancé la campagne "{{ campagne.name }}"</h2>
-			<div id='bip'></div>
-			<div class="h5 mt-4">
-				<p>Vous avez envoyé {{ campagne.destinataires|length }} emails</p>
-				<p>Pour suivre les stats cliquer sur le bouton <a class=" action-statistic btn btn-primary btn-block w-30" href="{{ ea_url().setRoute('admin_stat', { uid: campagne.id }) }}" data-action-name="statistic"><i class="action-icon fas fa-chart-line"></i> Stat campagne</a> dans la liste des campagnes créées.</p>
-				<p>Pour finaliser la campagne, envoyer les emails d'informations auprès des destinataires qui ont réagi en cliquant sur le bouton <a class=" action-sendInfo btn btn-warning btn-block w-30" href="{{ ea_url().setRoute('admin_email_infos', { uid: campagne.id }) }}" onclick="return(confirm('Etes-vous sûr de vouloir envoyer les emails ?'));" data-action-name="sendInfo"><i class="action-icon fas fa-mail-bulk"></i> Envoi Infos</a>.</p>
-			</div>
-			<script type="text/javascript">
-				let index = {{ index }};
-				let index_max = {{ index_max }};
-				let counter = {{ counter }};
-				let url = new URL("{{ ea_url().setRoute('admin_email_campagne', { uid: campagne.id }) }}")
-				// let param_c = {{ campagne.id }};
-			</script>
-		
+
+		<h2 class="text-center">Vous avez lancé la campagne "{{ campagne.name }}"</h2>
+		<div class="h5 mt-4" id="form">
+		</div>
+		<div class="h5 mt-4" id="after">
+			<p>Vous avez envoyé
+				{{ campagne.destinataires|length }}
+				emails</p>
+			<p>Pour suivre les stats cliquer sur le bouton
+				<a class=" action-statistic btn btn-primary btn-block w-30" href="{{ ea_url().setRoute('admin_stat', { uid: campagne.id }) }}" data-action-name="statistic">
+					<i class="action-icon fas fa-chart-line"></i>
+					Stat campagne</a>
+				dans la liste des campagnes créées.</p>
+			<p>Pour finaliser la campagne, envoyer les emails d'informations auprès des destinataires qui ont réagi en cliquant sur le bouton
+				<a class=" action-sendInfo btn btn-warning btn-block w-30" href="{{ ea_url().setRoute('admin_email_infos', { uid: campagne.id }) }}" onclick="return(confirm('Etes-vous sûr de vouloir envoyer les emails ?'));" data-action-name="sendInfo">
+					<i class="action-icon fas fa-mail-bulk"></i>
+					Envoi Infos</a> dans la liste des campagnes créées.</p>
+		</div>
+		<script type="text/javascript">
+			let index = {{ index }};
+			let index_max = {{ index_max }};
+			let counter = {{ counter }};
+		</script>
+
 
 	{% elseif campagne.isInfoSent is defined and campagne.isInfoSent %}
 		<h2 class="text-center">Campagne "{{ campagne.name }}"</h2>
-		<div>
-			<p>Vous avez envoyé {{ results|length }} emails d'informations aux destinataires qui ont réagi à la campagne.</p>
-			<p>Vous pouvez maintenant désactiver la campagne pour terminer cette opération.</p>
-		</div>	
+		<div class="h5 mt-4">
+			<p>Vous avez envoyé
+				{{ results|length }}
+				emails d'informations aux destinataires qui ont réagi à la campagne.</p>
+			<p>Vous pouvez maintenant désactiver la campagne pour terminer cette opération en cliquant sur bouton <a class=" action-disenable btn bg-dark text-white" href="{{ ea_url().setRoute('admin_campaign_toggle', { uid: campagne.id }) }}" data-action-name="disenable"><i class="action-icon fa fa-times-circle-o"></i> Désactiver</a> dans la liste des campagnes créées.
+			</p>
+		</div>
 
 	{% else %}
 		<h2 class="text-center">Bienvenue sur le tableau de bord de SwordPhish</h2>
