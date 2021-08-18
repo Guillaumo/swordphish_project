@@ -171,7 +171,7 @@ class EmailController extends AbstractController
 
             // création d'un nouvel email pour l'envoi vers chaque destinataire
             $email = (new TemplatedEmail())
-                ->from(Address::create('Geoffrey VIEMONT <Geoffrey.VIEMONT@impro-solutions.fr>'))
+                ->from(Address::create('Fabrice COUPRIE <Fabrice.COUPRIE@abalone-group.com>'))
                 ->to($address)
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')

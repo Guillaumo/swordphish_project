@@ -24,8 +24,8 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('<h1><img src="images/swordphish 70x70.jpg"/> SwordPhish</h1>')
-            ->setFaviconPath("images/swordphish 70x70.jpg")
+            ->setTitle('<h1><img src="images/swordphish-logo-70x70.png"/> SwordPhish</h1>')
+            ->setFaviconPath("images/swordphish-logo-70x70.png")
             ;
     }
 
