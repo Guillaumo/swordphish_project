@@ -79,7 +79,7 @@ class EmailController extends AbstractController
         // on récupère les destinataires de la campagne sélectionnée
         $destinataires = $destinataireRepository->findByCampagneField([$campagne]);
         // Nombre de destinataires à envoyer dans le même interval de temps
-        $nb_destinataires = 2;
+        $nb_destinataires = 1;
         // Interval de temps en minutes
         $interval = 2;
         // Longueur du tableau des destinataires
@@ -149,7 +149,7 @@ class EmailController extends AbstractController
             'campagne' => $campagne,
             'index' => $index + 1,
             'index_max' => count($groups) - 1,
-            'counter' => 5,
+            'counter' => 10,
             // 'num_dest' => count($destinataireRepository->findByCampagneField([$campagne])),
         ]);
     }

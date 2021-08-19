@@ -100,7 +100,7 @@ class CampagneCrudController extends AbstractCrudController
             })
             ->addCssClass('btn btn-danger btn-block w-30')
             ->setHtmlAttributes([
-                'onclick' => "return(confirm('Etes-vous sûr de vouloir envoyer les emails ?'));"
+                'onclick' => "return(confirm('Etes-vous sûr de vouloir envoyer les emails de la campagne ?'));"
             ]);
 
         // bouton d'envoi du retour d'infos vers les destinataires pour une campagne donnée - affiché si la campagne a été envoyée
@@ -122,9 +122,8 @@ class CampagneCrudController extends AbstractCrudController
             })
             ->addCssClass('btn btn-warning btn-block w-30')
             ->setHtmlAttributes([
-                'onclick' => "return(confirm('Etes-vous sûr de vouloir envoyer les emails d'infos ?'));"
-            ])
-            ;
+                'onclick' => "return(confirm('Etes-vous sûr de vouloir envoyer les emails d\'infos ?'));"
+            ]);
 
         // bouton d'envoi de mail(s) de test pour une campagne donnée
         $sendTest = Action::new('sendTest', 'Envoi test', 'fas fa-envelope')
@@ -212,10 +211,10 @@ class CampagneCrudController extends AbstractCrudController
             ])
             ->hideOnForm();
         yield BooleanField::new('isEnable', 'Campagne activée')
-            ->onlyOnForms();
+            ->onlyWhenUpdating();
         yield BooleanField::new('isSent', 'Campagne envoyée')
-            ->onlyOnForms();
+            ->onlyWhenUpdating();
         yield BooleanField::new('isInfoSent', 'Infos envoyés')
-            ->onlyOnForms();
+            ->onlyWhenUpdating();
     }
 }
