@@ -4,11 +4,12 @@ namespace App\Controller\Admin;
 
 use App\Entity\ResultCampaignUser;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 
 class ResultCampaignUserCrudController extends AbstractCrudController
 {
@@ -23,21 +24,17 @@ class ResultCampaignUserCrudController extends AbstractCrudController
         yield IdField::new('id')
             ->hideOnForm()
         ;
-        yield AssociationField::new('destinataire')
-           ->setFormTypeOptions([
-               'multiple' => true,
-           ])
-        ;
-        yield AssociationField::new('campagne')
-           ->setFormTypeOptions([
-               'multiple' => true,
-           ])
-        ;
+        yield AssociationField::new('destinataire');
+        yield AssociationField::new('campagne');
         yield TextField::new('userip','IP');
         yield TextField::new('username','User session');
         yield TextField::new('hostname','Nom machine et domaine');
         yield TextField::new('navigator','Navigateur');
-        yield DateTimeField::new('date')
+        yield TextField::new('lastname','Nom');
+        yield TextField::new('firstname','Prénom');
+        yield TelephoneField::new('telephone','Téléphone');
+        yield EmailField::new('email');
+        yield DateTimeField::new('created_at','date')
             ->setFormTypeOptions([
                 'html5' => true,
                 'years' => range(date('Y'), date('Y')+2),

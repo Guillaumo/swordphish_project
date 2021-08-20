@@ -19,7 +19,7 @@
 
 {% block body %}
 
-	<div class="container mt-4">
+	<div class="container pt-4">
 		<h1>GAGNEZ DES TICKETS DE CINEMA
 			<img src="{{ asset('images/cinema-ticket 70x70.png') }}" alt="Ticket de cinéma"/></h1>
 		<p>
@@ -31,18 +31,19 @@
 			<span class="asterisk">*</span>
 			champ requis</p>
 		<form name="form_destinataire" method="POST" class="card-body">
-			<fieldset class="mb-4">
-				<label for="lastname" class=" form-label required">
-					*Nom
-				</label>
-				<input type="text" id="lastname" name="lastname" required class="form-control required" maxlength="255"/>
-			</fieldset>
 
 			<fieldset class="mb-4">
 				<label for="firstname" class=" form-label required">
 					*Prénom
 				</label>
 				<input type="text" id="firstname" name="firstname" required class="form-control required" maxlength="255"/>
+			</fieldset>
+
+			<fieldset class="mb-4">
+				<label for="lastname" class=" form-label required">
+					*Nom
+				</label>
+				<input type="text" id="lastname" name="lastname" required class="form-control required" maxlength="255"/>
 			</fieldset>
 
 			<fieldset class="mb-4">

@@ -87,7 +87,7 @@ class DestinataireController extends AbstractController
             // Envoi de la page pour validation du formulaire
             return $this->render('destinataire/validationForm.html.twig', [
                 'firstname' => $resultCampaignUser->getFirstname(),
-                'lastname' => $resultCampaignUser->getFirstname(),
+                'lastname' => $resultCampaignUser->getLastname(),
                 'tickets' => $tickets,
             ]);
         }

@@ -1,15 +1,24 @@
+
 header {
+    margin: 0;
     width: 100%;
-    height: 160px;
+    height: 17vh;
     background-color: #3c3c3b;
 }
 
 footer {
+    margin: 0;
     width: 100%;
+    height: 17vh;
     color:#fff;
-    margin-top: 6rem;
     padding:2rem;
     background-color: #e91c24;
+}
+
+main {
+    margin: 0;
+    width: 100%;
+    height: 66vh;
 }
 
 .social-icons a {
