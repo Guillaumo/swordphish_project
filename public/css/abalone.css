@@ -2,14 +2,14 @@
 header {
     margin: 0;
     width: 100%;
-    height: 17vh;
+    min-height: 17vh;
     background-color: #3c3c3b;
 }
 
 footer {
     margin: 0;
     width: 100%;
-    height: 17vh;
+    min-height: 17vh;
     color:#fff;
     padding:2rem;
     background-color: #e91c24;
@@ -18,7 +18,7 @@ footer {
 main {
     margin: 0;
     width: 100%;
-    height: 66vh;
+    min-height: 66vh;
 }
 
 .social-icons a {

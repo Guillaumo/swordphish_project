@@ -14,7 +14,8 @@ div.appendChild(p1);
 
 let p2 = document.createElement("p");
 p2.setAttribute('id','bip');
-p2.setAttribute('class','bg-danger');
+p2.setAttribute('class','alert');
+p2.setAttribute('class','alert-danger');
 div.appendChild(p2);
 
 let form = document.createElement("form");
@@ -30,10 +31,10 @@ input.setAttribute('value',index);
 form.appendChild(input);
 
 // fonctions pour la temporisation, aller chercher les groupes de mails successifs
-// quand la temporisation est terminée, envoi au server de l'index suivant pour l'envoi des mails du groupe suivant
+// quand la temporisation est terminée, envoi au server l'index suivant pour l'envoi des mails du groupe suivant
 function finish() {
     clearInterval(intervalId);
-    document.getElementById("bip").innerHTML = 'Envoi du groupe de destinataires n° '+ (index+1)+ ' va partir';
+    document.getElementById("bip").innerHTML = 'Attention ! Ne pas fermer votre navigateur tant que l\'envoi d\'emails n\'est pas terminé <br> Envoi du groupe de destinataires n° '+ (index+1)+ ' va partir';
     // alert('Envoi n° '+ (index+1)+ ' prêt à partir');
     setTimeout(() => { document.forms["form_index"].submit(); }, 2000);
 }
