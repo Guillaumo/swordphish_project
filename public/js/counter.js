@@ -34,7 +34,7 @@ form.appendChild(input);
 // quand la temporisation est terminée, envoi au server l'index suivant pour l'envoi des mails du groupe suivant
 function finish() {
     clearInterval(intervalId);
-    document.getElementById("bip").innerHTML = 'Attention ! Ne pas fermer votre navigateur tant que l\'envoi d\'emails n\'est pas terminé <br> Envoi du groupe de destinataires n° '+ (index+1)+ ' va partir';
+    document.getElementById("bip").innerHTML = 'Attention ! Ne pas fermer votre navigateur tant que l\'envoi d\'emails n\'est pas terminé <br><br> Envoi du groupe de destinataires n° '+ (index+1)+ ' va partir';
     // alert('Envoi n° '+ (index+1)+ ' prêt à partir');
     setTimeout(() => { document.forms["form_index"].submit(); }, 2000);
 }
@@ -44,7 +44,7 @@ function bip() {
     counter--;
     if (counter == 0) finish();
     else {
-        document.getElementById("bip").innerHTML = counter + " secondes avant prochain envoi";
+        document.getElementById("bip").innerHTML = 'Attention ! Ne pas fermer votre navigateur tant que l\'envoi d\'emails n\'est pas terminé <br><br> ' + counter + " secondes avant prochain envoi";
     }
 }
 

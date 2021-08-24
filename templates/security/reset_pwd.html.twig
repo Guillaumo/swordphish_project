@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Réinitialisation du mot de passe
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="icon" sizes="70x70" type="image/webp" href="{{ asset('images/swordphish 70x70.jpg') }}">
+{% endblock %}
+
+{% block body %}
+    {% if errorPwd is defined %}
+        <div class="alert alert-danger text-center">{{ errorPwd }}</div>
+    {% endif %}
+
+	<form method="post" class="container mt-4">
+        <h1>Réinitialisation du mot de passe</h1>
+        <fielset class="pt-4 mb-4">
+            <label class="form-label">Votre identifiant</label>
+            <input type="text" class="form-control" disabled value = {{ user.username }}>
+			<input type="hidden" name='username' id="username" value = {{ user.username }}>
+		</fielset>
+		<fielset class="mb-4">
+			<label for="pwd1" class="form-label required">Saisissez votre nouveau mot de passe</label>
+			<input type="password" name="pwd1" id="pwd1" class="form-control" required autofocus>
+		</fielset>
+        <fielset class="mb-4">
+			<label for="pwd2" class="form-label required">Confirmez votre mot de passe</label>
+			<input type="password" name="pwd2" id="pwd2" class="form-control" required autofocus>
+		</fielset>
+		<fieldset class="mt-4 mb-4">
+			<button class="btn btn-lg btn-primary" name="submitPwd" type="submit">
+			Valider
+		</button>
+		</fieldset>
+    </form>
+{% endblock %}

@@ -85,11 +85,6 @@
 
 	{% else %}
 		<h2 class="text-center">Bienvenue sur le tableau de bord de SwordPhish</h2>
-		{% for error in app.flashes('error') %}
-			<div class="alert alert-danger" role="alert">
-				{{ error }}
-			</div>
-		{% endfor %}
 
 
 	{% endif %}
