@@ -79,9 +79,9 @@ class EmailController extends AbstractController
         // on récupère les destinataires de la campagne sélectionnée
         $destinataires = $destinataireRepository->findByCampagneField([$campagne]);
         // Nombre de destinataires à envoyer dans le même interval de temps
-        $nb_destinataires = 1;
-        // Interval de temps en minutes
-        $interval = 2;
+        $nb_destinataires = $campagne->getNumberRecipientsPerGroup();
+        // Interval de temps en minutes entre chaque envoi de groupes
+        $interval = $campagne->getTempoMinutes();
         // Longueur du tableau des destinataires
         $count = count($destinataires);
         // On boucle sur l'ensemble des destinataires pour former les groupes d'envoi
@@ -149,8 +149,7 @@ class EmailController extends AbstractController
             'campagne' => $campagne,
             'index' => $index + 1,
             'index_max' => count($groups) - 1,
-            'counter' => 10,
-            // 'num_dest' => count($destinataireRepository->findByCampagneField([$campagne])),
+            'counter' => $interval*60, // pour voir le décompte en seconde avant l'envoi suivant
         ]);
     }
 

@@ -58,6 +58,16 @@ class Campagne
      */
     private $isInfoSent;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $number_recipients_per_group;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $tempo_minutes;
+
     public function __construct()
     {
         $this->destinataires = new ArrayCollection();
@@ -199,5 +209,40 @@ class Campagne
         $this->isInfoSent = $isInfoSent;
 
         return $this;
+    }
+
+    public function getNumberRecipientsPerGroup(): ?int
+    {
+        return $this->number_recipients_per_group;
+    }
+
+    public function setNumberRecipientsPerGroup(?int $number_recipients_per_group): self
+    {
+        $this->number_recipients_per_group = $number_recipients_per_group;
+
+        return $this;
+    }
+
+    public function getTempoMinutes(): ?int
+    {
+        return $this->tempo_minutes;
+    }
+
+    public function setTempoMinutes(?int $tempo_minutes): self
+    {
+        $this->tempo_minutes = $tempo_minutes;
+
+        return $this;
+    }
+
+    /**
+     * Méthode pour calculer la durée d'envoi des emails de la campagne
+     *
+     * @return integer|null
+     */
+    public function getDurationSending(): ?int
+    {
+        $number_groups = count($this->destinataires)/$this->number_recipients_per_group;
+        return ($number_groups - 1) * $this->tempo_minutes;
     }
 }

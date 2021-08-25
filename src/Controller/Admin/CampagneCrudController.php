@@ -3,28 +3,20 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Campagne;
-use App\Entity\Destinataire;
-use Doctrine\DBAL\Types\BooleanType;
 use App\Repository\CampagneRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\DestinataireRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use Symfony\Component\Validator\Constraints\Date;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
 class CampagneCrudController extends AbstractCrudController
 {
@@ -198,9 +190,6 @@ class CampagneCrudController extends AbstractCrudController
         yield IdField::new('id')
             ->hideOnForm();
         yield AssociationField::new('destinataires')
-            //    ->setFormTypeOptions([
-            //        'multiple' => true,
-            //    ])
             ->setHelp('Pas besoin de sélectionner les destinataires, ils sont tous sélectionnés par défaut à la création d\'une campagne. Vous pouvez modifier la liste en enlevant des destinataires en mode edit.');
         yield TextField::new('name', 'Intitulé');
         yield DateField::new('date')
@@ -210,6 +199,28 @@ class CampagneCrudController extends AbstractCrudController
                 'widget' => 'single_text',
             ])
             ->hideOnForm();
+        yield IntegerField::new('number_recipients_per_group','Nombre de destinataires par groupe d\'envoi')
+            ->onlyOnForms()
+        ;
+        yield IntegerField::new('tempo_minutes','Temporisation des envois en minutes')
+            ->onlyOnForms()
+        ;
+        yield IntegerField::new('duration_sending','Durée de l\'envoi')
+            ->hideOnForm()
+            ->setTextAlign('center')
+            ->formatValue(function ($value) {
+                if($value>=60)
+                {
+                    $heures = intdiv($value,60);
+                    $minutes = $value - $heures*60;
+                    return $heures.' heure(s) et '.$minutes.' minute(s)';
+                }
+                else
+                {
+                    return $value.' minute(s)';
+                }
+            })
+        ;
         yield BooleanField::new('isEnable', 'Campagne activée')
             ->onlyWhenUpdating();
         yield BooleanField::new('isSent', 'Campagne envoyée')

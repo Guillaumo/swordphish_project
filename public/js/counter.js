@@ -6,7 +6,7 @@ document.getElementById("after").style.display = "none";
 let intervalId = null;
 
 // création et affichage d'éléments du DOM pour montrer la progession d'envois des groupes d'emails
-let div = document.getElementById("form");
+let div = document.getElementById("first");
 
 let p1 = document.createElement("p");
 p1.textContent = 'Envoi encours du groupe de destinataires n° ' + index;
@@ -30,12 +30,18 @@ input.setAttribute('type','hidden');
 input.setAttribute('value',index);
 form.appendChild(input);
 
+let img = document.createElement('img');
+// let gifPath = img.dataset.gifPath;
+img.setAttribute("src",'/images/loading.gif');
+img.setAttribute("class","text-center");
+// img.src = "{{ asset('images/loading.gif') }}";
+div.appendChild(img);
+
 // fonctions pour la temporisation, aller chercher les groupes de mails successifs
 // quand la temporisation est terminée, envoi au server l'index suivant pour l'envoi des mails du groupe suivant
 function finish() {
     clearInterval(intervalId);
     document.getElementById("bip").innerHTML = 'Attention ! Ne pas fermer votre navigateur tant que l\'envoi d\'emails n\'est pas terminé <br><br> Envoi du groupe de destinataires n° '+ (index+1)+ ' va partir';
-    // alert('Envoi n° '+ (index+1)+ ' prêt à partir');
     setTimeout(() => { document.forms["form_index"].submit(); }, 2000);
 }
 
@@ -52,7 +58,7 @@ function bip() {
 (function() {
     if (index>index_max) {
         setTimeout(() => { 
-            document.getElementById("form").style.display = "none";
+            document.getElementById("first").style.display = "none";
             document.getElementById("after").style.display = "block";
         }, 3000);
         
