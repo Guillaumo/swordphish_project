@@ -29,7 +29,6 @@ class DestinataireRepository extends ServiceEntityRepository
             ->andWhere(':val MEMBER OF d.campagnes')
             ->setParameter('val', $value)
             ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
@@ -50,6 +49,17 @@ class DestinataireRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+
+    // public function findAllOfficesDistinct()
+    // {
+    //     $em = $this->getEntityManager();
+    //     $query = $em->createQuery(
+    //         'SELECT DISTINCT d.office
+    //         FROM App\Entity\Destinataire d'
+    //     );
+    //     return $query->getResult();
+    // }
 
     /*
     public function findOneBySomeField($value): ?Destinataire

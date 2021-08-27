@@ -4,29 +4,35 @@ namespace App\Controller\Admin;
 
 use App\Entity\Campagne;
 use App\Repository\CampagneRepository;
+use App\Repository\DestinataireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 
 class CampagneCrudController extends AbstractCrudController
 {
     private $adminUrlGenerator;
     protected $campagneRepository;
+    protected $destinataireRepository;
 
-    public function __construct(AdminUrlGenerator $adminUrlGenerator, CampagneRepository $campagneRepository)
+    public function __construct(AdminUrlGenerator $adminUrlGenerator, CampagneRepository $campagneRepository, DestinataireRepository $destinataireRepository)
     {
         $this->adminUrlGenerator = $adminUrlGenerator;
         $this->campagneRepository = $campagneRepository;
+        $this->destinataireRepository = $destinataireRepository;
     }
 
     /**
@@ -226,6 +232,6 @@ class CampagneCrudController extends AbstractCrudController
         yield BooleanField::new('isSent', 'Campagne envoyée')
             ->onlyWhenUpdating();
         yield BooleanField::new('isInfoSent', 'Infos envoyés')
-            ->onlyWhenUpdating();
+            ->onlyWhenUpdating();   
     }
 }

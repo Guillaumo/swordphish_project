@@ -85,9 +85,6 @@ class SecurityController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $success = 'Votre nouveau mot de passe a bien été enregistré. Vous pouvez vous connecter.';
-            
-
             $this->addFlash('success','Votre nouveau mot de passe a bien été enregistré. Vous pouvez vous connecter.');
             return $this->redirectToRoute('app_login');
 

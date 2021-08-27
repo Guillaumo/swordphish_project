@@ -245,4 +245,14 @@ class Campagne
         $number_groups = count($this->destinataires)/$this->number_recipients_per_group;
         return ($number_groups - 1) * $this->tempo_minutes;
     }
+
+    // public function getOfficesDestinataires()
+    // {
+    //     $offices =[];
+    //     foreach($this->destinataires as $destinataire)
+    //     {
+    //         $offices [] = $destinataire->getOffice();
+    //     }
+    //     return $offices;
+    // }
 }

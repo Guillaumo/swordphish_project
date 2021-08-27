@@ -1,0 +1,19 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block main %}
+
+<h2 class="text-center">Importation fichier des destinataires</h2>
+<form method="post" enctype="multipart/form-data" class="card-body">
+    <fieldset class="mb-4">
+        <label for="file" class=" form-label required">Sélectionner le fichier à importer</label>
+        <input type="file" id="file" name="file" class="form-control required" accept=".csv">
+        <p class="text-muted">Seuls les fichiers en .csv sont acceptés</p>
+    </fieldset>
+    <fieldset class="mb-4 text-center">
+		<button type="submit" name="submit_file" class="btn btn-primary btn-lg">
+			Envoyer
+		</button>
+	</fieldset>
+</form>
+
+{% endblock %}
