@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Admin;
 use App\Entity\Campagne;
 use App\Entity\Destinataire;
 use App\Entity\ResultCampaignUser;
@@ -28,6 +29,9 @@ class DashboardController extends AbstractDashboardController
      */
     public function importFileDestinataires(DestinataireRepository $destinataireRepository, EntityManagerInterface $em)
     {
+        $error='';
+        $success='';
+
         if(isset($_POST['submit_file']))
         {
             $file = $_FILES['file']['name'];
@@ -35,29 +39,34 @@ class DashboardController extends AbstractDashboardController
             $uploadFile = $uploadDirectory.basename($file);
             if(!move_uploaded_file($_FILES['file']['tmp_name'],$uploadFile))
             {
-                $this->addFlash('message','Votre fichier ,n\'a pas pu être importé. Recommencer.');
+                $error = 'Votre fichier n\'a pas pu être importé. Recommencer.';
             }
 
             move_uploaded_file($_FILES['file']['tmp_name'],$uploadFile);
-            $this->addFlash('message','Votre fichier a bien été importé. Importation en BD en cours.');
+            $success = 'Votre fichier a bien été importé. Importation en BD en cours.';
 
+            // lecture du fichier csv
             $handle = fopen($uploadFile,'r');
-            $linecount = true;
+            // on récupère les éléments du fichier dans un tableau
+            $lines = [];
+            while ($line = fgetcsv($handle,0,';')) {
+                $lines[] = $line;
+            }
+            // on enlève la ligne des champs
+            array_shift($lines);
+            // on mélange le tableau
+            shuffle($lines);
 
-            while ($line = fgetcsv($handle,0,';')) 
+            // Insertion en BD la liste des destinataires
+            foreach($lines as $line) 
             {
-                if($linecount) 
-                {
-                    $linecount = false;
-                    continue;
-                }
-
                 $destinataire = $destinataireRepository->findOneBy(['email' => $line[6]]);
+                // si le destinataire n'existe pas déjà
                 if(is_null($destinataire))
                 {
                     $destinataire = new Destinataire;
                     $destinataire->setEmail($line[6]);
-                    $destinataire->setOffice($line[5]);
+                    $destinataire->setOffice($line[4]);
                     $firstname = strstr($line[0],' ',true);
                     $pos = strpos($line[0],' ');
                     $lastname = substr($line[0],$pos+1);
@@ -67,11 +76,47 @@ class DashboardController extends AbstractDashboardController
                     $em->persist($destinataire);
                     $em->flush();
                 }
-
             }
-
+            
+            // On supprime de la BD les destinataires qui ne sont pas présents dans la liste
+            
+            $destinataires = $destinataireRepository->findAll();
+            foreach($destinataires as $destinataire)
+            {
+                foreach($lines as $line)
+                {
+                    // on teste si le destinataire est présent dans la liste
+                    if($line[6] === $destinataire->getEmail())
+                    {
+                        $match = true;
+                        break;
+                    }
+                    // tant que l'email entre l'occurrence de la BD et la ligne du tableau issu du fichier csv ne match pas, c'est false
+                    $match = false;
+                    
+                }
+                // si pas dans la liste on le supprime de la BD
+                if($match == false)
+                {
+                    $em->remove($destinataire);
+                    $em->flush();
+                }
+            }
         }
-         return $this->render('admin/importFileForm.html.twig');
+
+         return $this->render('admin/importFileForm.html.twig', [
+             'error' => $error,
+             'success' => $success,
+         ]);
+    }
+
+    /**
+     * @Route("/admin/gestion", name="gestion_admin")
+     */
+    public function adminManagement()
+    {
+
+        return $this->render('admin/adminManagement.html.twig');
     }
 
     public function configureDashboard(): Dashboard
@@ -101,8 +146,9 @@ class DashboardController extends AbstractDashboardController
             ->setCssClass('h4');
         yield MenuItem::linkToRoute('Import destinataires','fas fa-file-import','import_destinataires')
             ->setCssClass('h5');
-        yield MenuItem::linkToRoute('Gestion admin','fas fa-user-cog','/')
+        yield MenuItem::linkToRoute('Gestion admin','fas fa-user-cog','gestion_admin')
             ->setCssClass('h5');
+        yield MenuItem::linkToCrud('Comptes administrateurs','fas fa-user-cog',Admin::class);
 
     }
 }

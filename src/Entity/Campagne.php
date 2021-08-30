@@ -242,7 +242,10 @@ class Campagne
      */
     public function getDurationSending(): ?int
     {
-        $number_groups = count($this->destinataires)/$this->number_recipients_per_group;
+        $number_groups = intdiv(count($this->destinataires),$this->number_recipients_per_group);
+        if((count($this->destinataires) % $this->number_recipients_per_group) >0) {
+            return ($number_groups) * $this->tempo_minutes;
+        }
         return ($number_groups - 1) * $this->tempo_minutes;
     }
 
