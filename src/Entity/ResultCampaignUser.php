@@ -26,11 +26,6 @@ class ResultCampaignUser
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $username;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $hostname;
 
     /**

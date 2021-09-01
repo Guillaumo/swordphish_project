@@ -1,57 +1,106 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block stylesheets %}
+	<style>
+		.render-pwd {
+			position: relative;
+		}
+		.render-pwd .password-icon {
+			display: flex;
+			align-items: center;
+			position: absolute;
+			top: 75%;
+			right: 20px;
+			transform: translateY(-50%);
+			width: 20px;
+			color: black;
+			transition: all 0.2s;
+		}
+
+		.render-pwd .password-icon:hover {
+			cursor: pointer;
+			color: #6174d1;
+		}
+
+		.render-pwd .password-icon .fa-eye-slash {
+			display: none;
+		}
+	</style>
+{% endblock %}
+
 {% block javascripts %}
 	<script src="{{ asset('js/pwd_update.js') }}" defer></script>
 {% endblock %}
 
 {% block main %}
-	{# {% if success %}
+	{% if success is defined %}
 		<div class="alert alert-success text-center" role="alert">
 			{{ success }}
 		</div>
-	{% elseif error %}
-	    <div class="alert alert-danger text-center" role="alert">
+	{% elseif error is defined %}
+		<div class="alert alert-danger text-center" role="alert">
 			{{ error }}
 		</div>
-	{% endif %} #}
+	{% endif %}
 	<h2 class="text-center">Gestion des comptes administrateurs</h2>
 	<form method="post" class="card-body border-bottom border-primary">
 		<legend>Modification du compte administrateur</legend>
 		<fieldset class="mb-4">
 			<label class="form-label">Votre identifiant (non modifiable)</label>
 			<input type="text" name="user" class="form-control required" disabled value={{ app.user.username }}>
-			<label class="form-label pt-4">Votre rôle (non modifiable)</label>
-			<input type="text" name="role" class="form-control required" disabled value='[ROLE_ADMIN]'>
 			<label class="form-label pt-4">Votre email</label>
 			<input type="email" name="email" class="form-control required" value={{ app.user.email }} required>
-			<div class="mt-4">
-				<button class="btn btn-secondary btn-lg" id="render_block">Modification de votre mot de passe</button>
+			<div class="render-pwd">
+				<label for="pwd1_update" class="form-label required pt-4">Saisissez votre nouveau mot de passe</label>
+				<input type="password" name="pwd1" id="pwd1_update" class="form-control pwd1" onkeyup='check();'>
+				<div class="password-icon">
+					<i class="fa fa-eye" aria-hidden="true"></i>
+					<i class="fa fa-eye-slash" aria-hidden="true"></i>
+				</div>
 			</div>
-			<div class="mt-4" id='pwd_update'>
-				<label for="pwd1" class="form-label required">Saisissez votre nouveau mot de passe</label>
-				<input type="password" name="pwd1" id="pwd1" class="form-control">
-				<label for="pwd2" class="form-label required pt-4">Confirmez votre mot de passe</label>
-				<input type="password" name="pwd2" id="pwd2" class="form-control">
+			<div>
+				<label for="pwd2_update" class="form-label required pt-4">Confirmez votre mot de passe</label>
+				<input type="password" name="pwd2" id="pwd2_update" class="form-control pwd2" onkeyup='check();'>
+				<span id='message'></span>
 			</div>
-			<button type="submit" name="submit_update_admin" class="btn btn-primary btn-lg mt-4">
+			<button type="submit" id="submit_update" name="submit_update_admin" class="btn btn-primary btn-lg mt-4">
 				Modifier
 			</button>
 		</fieldset>
 	</form>
-	<form method="post" class="card-body">
+	<form method="post" class="card-body border-bottom border-primary">
 		<legend>Création d'un compte administrateur</legend>
 		<fieldset class="mb-4">
-			<label class="form-label">Votre identifiant</label>
-			<input type="text" name="user" class="form-control required" required>
-			<label class="form-label pt-4">Votre rôle (non modifiable)</label>
-			<input type="text" name="role" class="form-control required" disabled value='[ROLE_ADMIN]'>
-			<label class="form-label pt-4">Votre email</label>
-			<input type="email" name="email" class="form-control required" required>
-			<label for="pwd1" class="form-label required pt-4" required>Saisissez votre mot de passe</label>
-			<input type="password" name="pwd1" id="pwd1" class="form-control" required>
-			<label for="pwd2" class="form-label required pt-4">Confirmez votre mot de passe</label>
-			<input type="password" name="pwd2" id="pwd2" class="form-control">
-			<button type="submit" name="submit_update_admin" class="btn btn-primary btn-lg mt-4">
+			<label for="username" class="form-label">Votre identifiant</label>
+			<input type="text" name="username" id="username" class="form-control required" required>
+			<label for="email" class="form-label pt-4">Votre email</label>
+			<input type="email" name="email" id="email" class="form-control required" required>
+			<div class="render-pwd">
+				<label for="pwd1_create" class="form-label required pt-4" required>Saisissez votre mot de passe</label>
+				<input type="password" name="pwd1" id="pwd1_create" class="form-control pwd1" required>
+				<div class="password-icon">
+					<i class="fa fa-eye" aria-hidden="true"></i>
+					<i class="fa fa-eye-slash" aria-hidden="true"></i>
+				</div>
+			</div>
+			<label for="pwd2_create" class="form-label required pt-4">Confirmez votre mot de passe</label>
+			<input type="password" name="pwd2" id="pwd2_create" class="form-control pwd2">
+			<button type="submit" name="submit_create_admin" id="submit_create" class="btn btn-primary btn-lg mt-4">
 				Créer
+			</button>
+		</fieldset>
+	</form>
+	<form method="post" class="card-body">
+	<legend>Suppression d'un compte administrateur</legend>
+		<fieldset class="mb-4">
+			{% for user in other_users %}
+				<div class="mb-4">
+					<input type="radio" id="{{ user.id }}" name="user" value="{{ user.id }}">
+					<label for="{{ user.id }}">{{ user.username }}</label>
+				</div>
+			{% endfor %}
+			<button type="submit" name="submit_delete_admin" id="submit_delete" class="btn btn-primary btn-lg mt-4">
+				Supprimer
 			</button>
 		</fieldset>
 	</form>

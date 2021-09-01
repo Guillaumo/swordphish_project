@@ -124,7 +124,7 @@ class DestinataireController extends AbstractController
         $host = gethostbyaddr($ip);
 
         // Nom de session Windows
-        $username = shell_exec("echo %username%");
+        // $username = shell_exec("echo %username%");
         //******************************************************************************
         //******************************************************************************
 
@@ -135,7 +135,7 @@ class DestinataireController extends AbstractController
 
         // Mise à jour de l'objet de la class ResultCampaignUser avec les infos d'environnement
         $resultCampaignUser->setUserip($ip);
-        $resultCampaignUser->setUsername($username);
+        // $resultCampaignUser->setUsername($username);
         $resultCampaignUser->setHostname($host);
         $resultCampaignUser->setNavigator($nav);
         $resultCampaignUser->setCreatedAt(new \DateTime());

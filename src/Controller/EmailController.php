@@ -176,7 +176,7 @@ class EmailController extends AbstractController
                 //->bcc('bcc@example.com')
                 //->replyTo('fabien@example.com')
                 ->priority(TemplatedEmail::PRIORITY_HIGH)
-                ->subject('Information phishing')
+                ->subject('Vos places de cinéma')
                 ->htmlTemplate('email/infos.html.twig')
                 ->context([
                     'result_campaign_user' => $result,

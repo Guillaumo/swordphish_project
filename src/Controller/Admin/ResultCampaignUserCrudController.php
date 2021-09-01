@@ -27,7 +27,6 @@ class ResultCampaignUserCrudController extends AbstractCrudController
         yield AssociationField::new('destinataire');
         yield AssociationField::new('campagne');
         yield TextField::new('userip','IP');
-        yield TextField::new('username','User session');
         yield TextField::new('hostname','Nom machine et domaine');
         yield TextField::new('navigator','Navigateur');
         yield TextField::new('lastname','Nom');
