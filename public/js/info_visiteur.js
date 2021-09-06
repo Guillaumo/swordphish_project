@@ -1,67 +1,35 @@
 "use strict";
-// /**
-//  * Fonction pour instancier un nouvel objet XMLHttpRequest
-//  * @returns 
-//  */
-// function getXMLHttpRequest() {
-// 	let xhr = null;
-	
-// 	if (window.XMLHttpRequest || window.ActiveXObject) {
-// 		if (window.ActiveXObject) {
-// 			try {
-// 				xhr = new ActiveXObject("Msxml2.XMLHTTP");
-// 			} catch(e) {
-// 				xhr = new ActiveXObject("Microsoft.XMLHTTP");
-// 			}
-// 		} else {
-// 			xhr = new XMLHttpRequest(); 
-// 		}
-// 	} else {
-// 		alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
-// 		return null;
-// 	}
-	
-// 	return xhr;
-// }
 
-// // Création de l'objet XMLHttpRequest
-// let xhr = getXMLHttpRequest();
+//***************************************************************************************
+// Création d'un formulaire permettant de récupérer les données js de résolution d'écran
+//***************************************************************************************
+let divResolution = document.getElementById('div_resolution');
+let formResolution = document.createElement('form');
+formResolution.setAttribute('id','form_resolution');
+formResolution.setAttribute('name','form_resolution');
+formResolution.setAttribute('method','POST');
+divResolution.appendChild(formResolution);
 
-// // Données récupérées par le JS
-// let width_screen = screen.width;
-// let height_screen = screen.height;
+let inputWidth = document.createElement("input");
+inputWidth.setAttribute('name','width');
+inputWidth.setAttribute('type','hidden');
+inputWidth.setAttribute('value',screen.width);
+formResolution.appendChild(inputWidth);
 
-// // Envoi des données au serveur
-// xhr.open("POST", "DestinataireController.php", true);
-// xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-// // Alternative : xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-// xhr.send("variable1=width_screen&variable2=height_screen");
+let inputHeight = document.createElement("input");
+inputHeight.setAttribute('name','height');
+inputHeight.setAttribute('type','hidden');
+inputHeight.setAttribute('value',screen.height);
+formResolution.appendChild(inputHeight);
 
-//******************************************************************************
-// Création d'un élément div
-//******************************************************************************
-// const box = document.createElement('div');
-// document.body.appendChild(box); // On envoie le tout
-const box = document.getElementById('js');
+function getResolution () {
+    setTimeout(() => { document.forms["form_resolution"].submit(); }, 1000);
+}
 
-//******************************************************************************
-// Largeur X Hauteur
-//******************************************************************************
-box.innerHTML = 'Votre résolution  d\'écran est de ' + screen.width + ' x ' + screen.height + '.';
 
-//******************************************************************************
-// Plug-ins
-//******************************************************************************
-// Nombre de plug-ins installés
-// let nbplugin = navigator.plugins.length;
-// if (nbplugin) {
-//     box.innerHTML += 'Plug-ins installés ( ' + nbplugin + ' ) :';
-
-//     let i = -1;
-//     while (i < nbplugin) { // Affichage des noms des plug-ins
-//         i++;
-//         box.innerHTML += ' ' + navigator.plugins[i].name + ', ';
-//     }
-// } else {
-//     box.innerHTML += 'Il n\' y a aucun plug-ins installé.';
-// }
+(function() {
+    if (post == 1) {
+        return;
+    }
+    return getResolution();
+} ())

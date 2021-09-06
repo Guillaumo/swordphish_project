@@ -246,4 +246,14 @@ class ResultCampaignUser
 
         return $this;
     }
+
+    /**
+     * Méthode pour récupérer et afficher la résolution de l'écran
+     *
+     * @return string
+     */
+    public function getResolution(): string
+    {
+        return $this->screenwidth.' x '.$this->screenheight;
+    }
 }

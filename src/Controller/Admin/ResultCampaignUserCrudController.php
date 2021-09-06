@@ -29,6 +29,9 @@ class ResultCampaignUserCrudController extends AbstractCrudController
         yield TextField::new('userip','IP');
         yield TextField::new('hostname','Nom machine et domaine');
         yield TextField::new('navigator','Navigateur');
+        yield TextField::new('resolution','Résolution d\'écran')
+            ->hideOnForm()
+        ;
         yield TextField::new('lastname','Nom');
         yield TextField::new('firstname','Prénom');
         yield TelephoneField::new('telephone','Téléphone');

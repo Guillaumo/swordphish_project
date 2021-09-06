@@ -19,8 +19,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
 class CampagneCrudController extends AbstractCrudController
 {
@@ -195,6 +197,15 @@ class CampagneCrudController extends AbstractCrudController
     {
         yield IdField::new('id')
             ->hideOnForm();
+        
+        // yield ChoiceField::new('destinataires')
+        //     ->onlyOnForms()
+        //     ->autocomplete()
+        //     ->renderExpanded()
+        //     ->setChoices([
+        //         'tout' => true
+        //     ])
+        // ;
         yield AssociationField::new('destinataires')
             ->setHelp('Pas besoin de sélectionner les destinataires, ils sont tous sélectionnés par défaut à la création d\'une campagne. Vous pouvez modifier la liste en enlevant des destinataires en mode edit.');
         yield TextField::new('name', 'Intitulé');

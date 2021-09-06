@@ -45,17 +45,17 @@ class DestinataireController extends AbstractController
         $destinataire = $destinataireRepository->findOneBy(['id' => $id_d]);
 
         // On teste les erreurs d'accès selon les cas
-        if(!$campagne) // si la campagne a été supprimée
+        if (!$campagne) // si la campagne a été supprimée
         {
             throw $this->createNotFoundException("La campagne n'existe pas.");
         }
 
-        if(!$campagne->getIsEnable()) // si la campgne est désactivée
+        if (!$campagne->getIsEnable()) // si la campgne est désactivée
         {
-            throw $this->createNotFoundException("La campagne ".$campagne->getName()." est terminée.");
+            throw $this->createNotFoundException("La campagne " . $campagne->getName() . " est terminée.");
         }
 
-        if(!$destinataire) // si le destinataire a été supprimé
+        if (!$destinataire) // si le destinataire a été supprimé
         {
             throw $this->createNotFoundException("Le destinataire n'existe pas.");
         }
@@ -82,7 +82,7 @@ class DestinataireController extends AbstractController
             // Mise en BD
             $entityManagerInterface->persist($resultCampaignUser);
             $entityManagerInterface->flush();
-       
+
 
             // Envoi de la page pour validation du formulaire
             return $this->render('destinataire/validationForm.html.twig', [
@@ -123,8 +123,7 @@ class DestinataireController extends AbstractController
         // Nom de la machine et nom de domaine
         $host = gethostbyaddr($ip);
 
-        // Nom de session Windows
-        // $username = shell_exec("echo %username%");
+
         //******************************************************************************
         //******************************************************************************
 
@@ -141,14 +140,22 @@ class DestinataireController extends AbstractController
         $resultCampaignUser->setCreatedAt(new \DateTime());
         $resultCampaignUser->setCampagne($campagne);
         $resultCampaignUser->setDestinataire($destinataire);
+        // Récupération de la résolution de l'écran à partir du script JS
+        $post = 0;
+        if ((isset($_POST['width'])) && (isset($_POST['height']))) {
+            $resultCampaignUser->setScreenwidth($_POST['width']);
+            $resultCampaignUser->setScreenheight($_POST['height']);
+            $post = 1;
+        }
         // Mise en BD
         $entityManagerInterface->persist($resultCampaignUser);
         $entityManagerInterface->flush();
-       
+
 
         return $this->render('destinataire/index.html.twig', [
             'id_campagne' => $id_c,
             'id_destinataire' => $id_d,
+            'post' => $post,
             // 'form_destinataire' => $form->createView(),
         ]);
     }
@@ -197,13 +204,13 @@ class DestinataireController extends AbstractController
             $host = gethostbyaddr($ip);
 
             // Nom de session Windows
-            $username = shell_exec("echo %username%");
+            // $username = shell_exec("echo %username%");
             //******************************************************************************
             //******************************************************************************
 
             $result = [
-                'userip'=> $ip,
-                'username' => $username,
+                'userip' => $ip,
+                // 'username' => $username,
                 'hostname' => $host,
                 'navigator' => $nav,
                 'lastname' => $_POST['lastname'],
@@ -222,7 +229,7 @@ class DestinataireController extends AbstractController
                 //->bcc('bcc@example.com')
                 //->replyTo('fabien@example.com')
                 ->priority(TemplatedEmail::PRIORITY_HIGH)
-                ->subject('Information phishing')
+                ->subject('Gagner des tickets de cinéma !')
                 // ->text('Sending emails is fun again!')
                 // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
                 ->htmlTemplate('email/infos.html.twig')

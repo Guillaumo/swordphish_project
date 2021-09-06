@@ -18,7 +18,6 @@
 
         {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
-            <script src="{{ asset('js/info_visiteur.js') }}" defer></script>
         {% endblock %}
 
     </head>
@@ -34,6 +33,8 @@
 
         {# Footer #}
         {% block footer %}{% endblock %}
-        
+
+        {# Script #}
+        {% block body_javascript %}{% endblock body_javascript %}
     </body>
 </html>

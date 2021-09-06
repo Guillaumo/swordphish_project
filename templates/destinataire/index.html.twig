@@ -14,17 +14,17 @@
 {% endblock %}
 
 {% block header %}
-    {% include './partials/header_abalone.html.twig' %}
+	{% include './partials/header_abalone.html.twig' %}
 {% endblock %}
 
 {% block body %}
-
+	
 	<div class="container pt-4">
 		<h1>GAGNEZ DES TICKETS DE CINEMA
 			<img src="{{ asset('images/cinema-ticket 70x70.png') }}" alt="Ticket de cinéma"/></h1>
 		<p>
 			Plus vite vous envoyez le formulaire ci-dessous, plus de chance
-			        vous aurez à gagner vos tickets.
+						        vous aurez à gagner vos tickets.
 		</p>
 		<h2>Nombre de tickets restants disponibles : 75</h2>
 		<p class="text-muted">
@@ -74,15 +74,22 @@
 			</fieldset>
 		</form>
 
+		<div id="div_resolution"></div>
+
 		<div>
 			{# {{ form(form_destinataire) }} #}
 		</div>
 
-		
-
 	</div>
+	
 {% endblock %}
 
 {% block footer %}
-    {% include './partials/footer_abalone.html.twig' %}
+	{% include './partials/footer_abalone.html.twig' %}
 {% endblock %}
+{% block body_javascript %}
+	<script type="text/javascript">
+
+		let post = {{ post }};
+	</script>
+{% endblock body_javascript %}

@@ -1,27 +1,53 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
 {% block main %}
-{% if success %}
-	<div class="alert alert-success text-center" role="alert">
-		{{ success }}
-	</div>
-{% elseif error %}
-    <div class="alert alert-danger text-center" role="alert">
-		{{ error }}
-	</div>
-{% endif %}
-<h2 class="text-center">Importation fichier des destinataires</h2>
-<form method="post" enctype="multipart/form-data" class="card-body">
-    <fieldset class="mb-4">
-        <label for="file" class=" form-label required">Sélectionner le fichier à importer</label>
-        <input type="file" id="file" name="file" class="form-control required" accept=".csv" required>
-        <p class="text-muted">Seuls les fichiers en .csv sont acceptés</p>
-    </fieldset>
-    <fieldset class="mb-4 text-center">
-		<button type="submit" name="submit_file" class="btn btn-primary btn-lg">
-			Envoyer
-		</button>
-	</fieldset>
-</form>
+	{% if success %}
+		<div class="alert alert-success text-center" role="alert">
+			{{ success }}
+		</div>
+	{% elseif error %}
+		<div class="alert alert-danger text-center" role="alert">
+			{{ error }}
+		</div>
+	{% endif %}
+	<h2 class="text-center">Importation fichier des destinataires</h2>
+	<form method="post" enctype="multipart/form-data" class="card-body">
+		<fieldset class="mb-4">
+			<label for="file" class=" form-label required">Sélectionner le fichier à importer</label>
+			<input type="file" id="file" name="file" class="form-control required" accept=".csv" required>
+			<p class="text-muted">Seuls les fichiers en .csv sont acceptés</p>
+		</fieldset>
+		<fieldset class="mb-4 text-center">
+			<button type="submit" name="submit_file" class="btn btn-primary btn-lg">
+				Envoyer
+			</button>
+		</fieldset>
+	</form>
+	{% if old_destinataire_result %}
+		<p>Destinataires ne faisant plus partis du fichier d'import mais présents dans les résultats d'anciennes campagnes :</p>
+			<table class="table">
+				<thead>
+					<tr class="">
+						<th scope="col">Nom</th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Agence</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for destinataire in old_destinataire_result %}
+					<tr>
+						<td scope="row">{{ destinataire.lastname }}</td>
+						<td>{{ destinataire.firstname }}</td>
+						<td>{{ destinataire.office }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+		</table>
+		<p>Ces destinataires ne seront pas supprimés de la BD.<br>
+		Si vous souhaitez les supprimés, il faut les supprimés des résultats.<br>
+		Ensuite vous pouvez de nouveau importer le fichier d'import.
+		</p>
+	{% endif %}
+
 
 {% endblock %}

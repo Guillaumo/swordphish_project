@@ -7,8 +7,10 @@ use App\Entity\Campagne;
 use App\Entity\Destinataire;
 use App\Entity\ResultCampaignUser;
 use App\Repository\AdminRepository;
+use App\Repository\CampagneRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DestinataireRepository;
+use App\Repository\ResultCampaignUserRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -29,10 +31,11 @@ class DashboardController extends AbstractDashboardController
     /**
      * @Route("/admin/import/destinataires", name="import_destinataires")
      */
-    public function importFileDestinataires(DestinataireRepository $destinataireRepository, EntityManagerInterface $em)
+    public function importFileDestinataires(DestinataireRepository $destinataireRepository, ResultCampaignUserRepository $resultCampaignUserRepository, EntityManagerInterface $em)
     {
         $error = '';
         $success = '';
+        $old_destinataire_result = [];
 
         if (isset($_POST['submit_file'])) {
             $file = $_FILES['file']['name'];
@@ -43,7 +46,7 @@ class DashboardController extends AbstractDashboardController
             }
 
             move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile);
-            $success = 'Votre fichier a bien été importé. Importation en BD en cours.';
+            $success = 'Votre fichier a bien été importé. La BD a été mise à jour.';
 
             // lecture du fichier csv
             $handle = fopen($uploadFile, 'r');
@@ -89,6 +92,13 @@ class DashboardController extends AbstractDashboardController
                     // tant que l'email entre l'occurrence de la BD et la ligne du tableau issu du fichier csv ne match pas, c'est false
                     $match = false;
                 }
+                // on teste si le destinataire qui ne fait plus parti de la liste,
+                    // fait parti d'anciens résultats de campagne
+                    if (($resultCampaignUserRepository->findOneBy(['destinataire' => $destinataire])) && (!$match) ) {
+                        $old_destinataire_result[] = $destinataire;
+                        $match = true;
+                    }
+
                 // si pas dans la liste on le supprime de la BD
                 if ($match == false) {
                     $em->remove($destinataire);
@@ -100,6 +110,7 @@ class DashboardController extends AbstractDashboardController
         return $this->render('admin/importFileForm.html.twig', [
             'error' => $error,
             'success' => $success,
+            'old_destinataire_result' => $old_destinataire_result,
         ]);
     }
 
