@@ -201,6 +201,14 @@ class DashboardController extends AbstractDashboardController
         ]);
     }
 
+    /**
+     * @Route("/admin/readme", name="readme")
+     */
+    public function readme()
+    {
+        return $this->render('README.MD.twig');
+    }
+
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
@@ -224,6 +232,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('Import destinataires', 'fas fa-file-import', 'import_destinataires')
             ->setCssClass('h5');
         yield MenuItem::linkToRoute('Gestion admin', 'fas fa-user-cog', 'gestion_admin')
+            ->setCssClass('h5');
+        yield MenuItem::section();
+        yield MenuItem::linkToRoute('Documentation', 'fas fa-file', 'readme')
             ->setCssClass('h5');
     }
 }

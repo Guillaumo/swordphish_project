@@ -1,0 +1,210 @@
+{% apply markdown_to_html %}
+# ![Logo]({{ asset('images/swordphish-logo-70x70.png') }}) SwordPhish
+## _Your phishing campaign Application_
+
+## Table of Contents
+1. [General Info](#general-info)
+2. [Technologies](#technologies)
+3. [Installation](#installation)
+4. [Presentation](#presentation)
+
+## General Info <a id="general-info"></a>
+***
+SwordPhish is an application developed with the Symfony framework, in PHP for the back-end and in Twig, Bootstrap and JS for the front-end.
+
+
+### Screenshot
+![Capture]({{ asset('images/SwordPhish_capture.png') }})
+
+## Technologies <a id="technologies"></a>
+***
+A list of technologies used within the project:
+* [Symfony](https://symfony.com/): Version 5.3 
+* [PHP](https://www.php.net/): Version 7.3
+* [Twig](https://twig.symfony.com/): Version 3.x
+* [Library Bootstrap](https://getbootstrap.com/): Version 4
+* [Library Chart.js](https://www.chartjs.org/): Version 2.9.4
+
+## Installation <a id="installation"></a>
+***
+For the installation, see : [https://symfony.com/doc/current/setup.html](https://symfony.com/doc/current/setup.html) and [https://symfony.com/doc/current/the-fast-track/fr/1-tools.html](https://symfony.com/doc/current/the-fast-track/fr/1-tools.html)
+
+```sh
+$ git clone https://example.com
+
+```
+
+## Presentation <a id="presentation"></a>
+***
+### The Symfony framework is architectured according to the MVC (Model, View, Controller) typology.
+- Model : 
+    * in the src/Entity directory : brings together the different entities
+    * in the src/Repository : groups the basic queries on the database for each entity
+- View : in the templates directory, the Twig view files
+- Controller : in the src/Controller, the different controllers for processing
+
+### Main structures of a Symfony project :
+* public/ : only folder accessible from the outside (containing the front controller index.php)
+            > **The url of the app must point to this folder.**
+* src/ : containing the source files of the application (controllers, entities, forms, DAO ...)
+* templates/ : containing the views (partial view) of the application
+
+For more information : [http://www.lsis.org/elmouelhia/courses/php/sf/coursSymfonyInstallation.pdf](http://www.lsis.org/elmouelhia/courses/php/sf/coursSymfonyInstallation.pdf)
+
+### Symfony Bundles
+Bundles provide ready-to-use features for Symfony applications.
+Mainly bundles installed :
+    - MakerBundle : Symfony Maker helps you create empty commands, controllers, form classes, tests and more so you can forget about writing boilerplate code.
+    > [https://symfony.com/bundles/SymfonyMakerBundle/current/index.html](https://symfony.com/bundles/SymfonyMakerBundle/current/index.html)
+    - DoctrineBundle : Integrates Doctrine's ORM and DBAL projects into Symfony applications.
+    > [https://symfony.com/bundles/DoctrineBundle/current/index.html](https://symfony.com/bundles/DoctrineBundle/current/index.html)
+    - DoctrineMigrationsBundle : Database migrations are a way to safely update your database schema both locally and on production.
+    > [https://symfony.com/bundles/DoctrineMigrationsBundle/current/index.html](https://symfony.com/bundles/DoctrineMigrationsBundle/current/index.html)
+    - SecurityBundle : [https://symfony.com/doc/current/security.html](https://symfony.com/doc/current/security.html)
+    - EasyAdminBundle : EasyAdmin creates beautiful administration backends for your Symfony applications.
+    > [https://symfony.com/bundles/EasyAdminBundle/current/index.html](https://symfony.com/bundles/EasyAdminBundle/current/index.html)
+
+### Library packages
+Bootstrap and chart.js are implemented via CDN links.
+* Bootstrap : 
+```html
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"> defer</script>
+```
+* Chart.js : 
+```html
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js" defer></script>
+```
+
+### Complete project structure
+
+<pre>
+📦swordphish
+ ┣ 📂assets 
+ &emsp;&emsp;&emsp;&emsp; - This folder contains all the assets needed for the front end of our Symfony application.
+ ┃ ┗ 📂images 
+ | &emsp;&emsp;&emsp;&emsp; - Not really used in our case excepted pictures for the email templates.
+ ┣ 📂bin 
+ &emsp;&emsp;&emsp;&emsp; - This folder contains the command files allowing, for example, to empty the Symfony cache, update the database or even run our unit tests. We usually use the <b><i>php bin / console</i></b> command which displays all the available Symfony commands.
+ ┣ 📂config 
+ &emsp;&emsp;&emsp;&emsp; - All the configuration of packages, services and routes will be done in this folder. This will allow, among other things, to configure our connection to the database, to set up a whole security system, or to personalize the services that we will develop. The configuration files are by default in <b>YAML</b>, although it is quite possible to use <b>PHP</b> or <b>XML</b>.
+ ┣ 📂migrations 
+ &emsp;&emsp;&emsp;&emsp; - Contains all the files allowing to migrate the entities created by creating, modifying or deleting tables in the database.
+ ┣ 📂public 
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; - This is the entry point of the application: each request / request necessarily goes through this folder and the <b><i>index.php</i></b> file. Being accessible by everyone, it is generally used to provide resource files, mainly images.
+ ┃ ┣ 📂bundles
+ ┃ ┃ ┗ 📂easyadmin 
+ | | &emsp;&emsp;&emsp;&emsp; - Resources that manage the font-end of the easyadmin bundle.
+ ┃ ┣ 📂css 
+ | &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; - Contains css files for a specific layout of web pages.
+ ┃ ┃ ┣ 📜abalone.css &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; - css file for the landing page Abalone layout.
+ ┃ ┃ ┗ 📜impro.css &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; - css file for the info page Impro layout. Is no longer used due to the change of scenario.
+ ┃ ┣ 📂images 
+ | &emsp;&emsp;&emsp;&emsp;&emsp; - Contains the images illustrating the web pages.
+ ┃ ┣ 📂js 
+ | &emsp;&emsp;&emsp;&emsp; - Contains js script files specific to certain web pages.
+ ┃ ┃ ┣ 📜chart.js &emsp;&emsp;&emsp;&emsp; - js script to display the stat graphs.
+ ┃ ┃ ┣ 📜counter.js &emsp;&emsp;&emsp;&emsp; - js script to manage the timing of email sending.
+ ┃ ┃ ┣ 📜info_visiteur.js &emsp;&emsp;&emsp;&emsp; - js script to collect visitor's screen resolution.
+ ┃ ┃ ┗ 📜pwd_update.js &emsp;&emsp;&emsp;&emsp; - js script to manage password verification when creating a new administrator.
+ ┃ ┣ 📂svg 
+ | &emsp;&emsp;&emsp;&emsp; - Contains svg files specific to certain web pages.
+ ┃ ┣ 📂upload 
+ | &emsp;&emsp;&emsp;&emsp; - Contains the upload files, in particular the csv file for importing "destinataires".
+ ┃ ┃ ┗ 📜Contacts.csv
+ ┃ ┣ 📜.htaccess &emsp;&emsp;&emsp;&emsp; - Apache HTTP servers configuration file.
+ ┃ ┗ 📜index.php &emsp;&emsp;&emsp;&emsp; - Website entry point file.
+ ┣ 📂src 
+ &emsp;&emsp;&emsp;&emsp; - This is the heart of the project! The place where you will spend the most time coding. It gathers all the PHP code of your application, this is where you will set up all the logic of your application.
+ ┃ ┣ 📂Controller 
+ | &emsp;&emsp;&emsp;&emsp; - Defining the entry points for your application. It is responsible for redirecting to the Manager / Service / Repository. No data processing, access to the BDD (database) must be done from a Controller (very important). Possibility to choose the input methods (GET, POST, PUT, DELETE, ...) as well as the type of response returned (JSON, XML, ...).
+ ┃ ┃ ┣ 📂Admin 
+ | | &emsp;&emsp;&emsp;&emsp; - Admin controllers part.
+ ┃ ┃ ┃ ┣ 📜CampagneCrudController.php &emsp;&emsp;&emsp;&emsp; - Controller allowing to manage the CRUD of the "Campagne" table. It is also the main controller which processes the heart of the application : the actions of sending emails, sending test emails and displaying statistics.
+ ┃ ┃ ┃ ┣ 📜DashboardController.php &emsp;&emsp;&emsp;&emsp; - Administrator dashboard controller : main menus.
+ ┃ ┃ ┃ ┣ 📜DestinataireCrudController.php &emsp;&emsp;&emsp;&emsp; - Controller allowing to manage the CRUD of the "Destinataire" table.
+ ┃ ┃ ┃ ┗ 📜ResultCampaignUserCrudController.php &emsp;&emsp;&emsp;&emsp; - Controller allowing to manage the CRUD of the "ResultCampaignUser" table.
+ ┃ ┃ ┣ 📜DestinataireController.php &emsp;&emsp;&emsp;&emsp; - Controller handling the display of the Abalone landing page when the visitor clicks on the link received by email and also when he submits the form.
+ ┃ ┃ ┣ 📜EmailController.php &emsp;&emsp;&emsp;&emsp; - Controller handling the sending of emails for the launch of the campaign and for sending the information as well as the tests when the action is ran from the dashboard controller.
+ ┃ ┃ ┣ 📜SecurityController.php &emsp;&emsp;&emsp;&emsp; - Controller handling login and logout as well as forgot password functionality.
+ ┃ ┃ ┣ 📜StatController.php &emsp;&emsp;&emsp;&emsp; - Controller processing graph display
+ ┃ ┃ ┗ 📜WelcomeController.php &emsp;&emsp;&emsp;&emsp; - Controller allowing to redirect the root route of the url to the admin route.
+ ┃ ┣ 📂Entity 
+ | &emsp;&emsp;&emsp;&emsp; - Definition of the structure of your BDD (database) through classes. Each Entity generally represents a table in BDD. The <b><i>php bin / console doctrine: migrations</b></i> command will allow us to update our database each time the Entity is modified.
+ ┃ ┃ ┣ 📜Admin.php &emsp;&emsp;&emsp;&emsp; - Administrator entity and class relating to the Admin table of the database. Its properties and methods are mapped to the Admin table through ORM.
+ ┃ ┃ ┣ 📜Campagne.php &emsp;&emsp;&emsp;&emsp; - Campagne entity and class relating to the Camapgne table of the database. Its properties and methods are mapped to the Campagne table through ORM.
+ ┃ ┃ ┣ 📜Destinataire.php &emsp;&emsp;&emsp;&emsp; - Destinataire entity and class relating to the Destinataire table of the database. Its properties and methods are mapped to the Destinataire table through ORM.
+ ┃ ┃ ┗ 📜ResultCampaignUser.php &emsp;&emsp;&emsp;&emsp; - ResultCampaignUser entity and class relating to the ResultCampaignUser table of the database. Its properties and methods are mapped to the ResultCampaignUser table through ORM.
+ ┃ ┣ 📂EventSubscriber 
+ | &emsp;&emsp;&emsp;&emsp; - EasyAdmin triggers several Symfony events during the execution of its requests, so you can listen to those events and run your own logic.
+ ┃ ┃ ┗ 📜EasyAdminSubscriber.php  &emsp;&emsp;&emsp;&emsp; - Here we have an event listener so that we can automatically select all recipients by default when creating a new campaign.
+ ┃ ┣ 📂Repository 
+ | &emsp;&emsp;&emsp;&emsp; - A Repository is always attached to an Entity, it allows us to create our functions which will request the table of our Entity (as well as the linked tables). Symfony uses ORM Doctrine which allows us to create our SQL queries through queryBuilder (very useful if you hate doing SQL).
+ ┃ ┃ ┣ 📜AdminRepository.php &emsp;&emsp;&emsp;&emsp; - So, here we the repository for the Admin entity.
+ ┃ ┃ ┣ 📜CampagneRepository.php &emsp;&emsp;&emsp;&emsp; - So, here we the repository for the Campagne entity.
+ ┃ ┃ ┣ 📜DestinataireRepository.php &emsp;&emsp;&emsp;&emsp; - So, here we the repository for the Destinatire entity.
+ ┃ ┃ ┗ 📜ResultCampaignUserRepository.php &emsp;&emsp;&emsp;&emsp; - So, here we the repository for the ResultCampaignUser entity.
+ ┃ ┣ 📂Security 
+ | &emsp;&emsp;&emsp;&emsp; - Folder containing all the authentication controllers
+ ┃ ┃ ┗ 📜AppAdminAuthenticator.php &emsp;&emsp;&emsp;&emsp; - Controller dealing with authentication, security of the administrator interface and its routes via the configuration file in config/packages/security.yaml.
+ ┃ ┗ 📜Kernel.php &emsp;&emsp;&emsp;&emsp; - Core of the Symfony framework
+ ┣ 📂templates 
+ &emsp;&emsp;&emsp;&emsp; - Symfony has been using the Twig template engine since its inception. Twig template files have the format monfichier html.twig and add some features to classic HTML: <a href="https://twig.symfony.com/doc/3.x/">https://twig.symfony.com/doc/3.x/</a>
+ ┃ ┣ 📂admin 
+ | &emsp;&emsp;&emsp;&emsp; - Templates for the Admin interface.
+ ┃ ┃ ┣ 📜adminManagement.html.twig &emsp;&emsp;&emsp;&emsp; - View for managing admin accounts.
+ ┃ ┃ ┣ 📜importFileForm.html.twig &emsp;&emsp;&emsp;&emsp; - View for importing csv file.
+ ┃ ┃ ┗ 📜index.html.twig &emsp;&emsp;&emsp;&emsp; - Main view with display of test and campaign email submissions, stats and tutorial.
+ ┃ ┣ 📂bundles
+ ┃ ┃ ┗ 📂EasyAdminBundle 
+ | | &emsp;&emsp;&emsp;&emsp; - All the templates of the easyadmin bundle allowing to overload them.
+ ┃ ┣ 📂destinataire 
+ | &emsp;&emsp;&emsp;&emsp; - Templates for the Destinataire interface.
+ ┃ ┃ ┣ 📜index.html.twig &emsp;&emsp;&emsp;&emsp; - View displaying the Abalone landing page with the form
+ ┃ ┃ ┗ 📜validationForm.html.twig &emsp;&emsp;&emsp;&emsp; - View showing confirmation of form submission.
+ ┃ ┣ 📂email 
+ | &emsp;&emsp;&emsp;&emsp; - Templates for the Email interface.
+ ┃ ┃ ┣ 📜index.html.twig &emsp;&emsp;&emsp;&emsp; - View displaying the campaign email.
+ ┃ ┃ ┗ 📜infos.html.twig &emsp;&emsp;&emsp;&emsp; - View displaying the information email.
+ ┃ ┣ 📂partials 
+ | &emsp;&emsp;&emsp;&emsp; - Header and footer templates.
+ ┃ ┃ ┣ 📜footer_abalone.html.twig &emsp;&emsp;&emsp;&emsp; - Footer of Abalone web page.
+ ┃ ┃ ┣ 📜footer_impro.html.twig &emsp;&emsp;&emsp;&emsp; - Footer of Impro web page. Is no longer used due to the change of scenario.
+ ┃ ┃ ┣ 📜header_abalone.html.twig &emsp;&emsp;&emsp;&emsp; - Header of Abalone web page.
+ ┃ ┃ ┣ 📜header_impro.html.twig footer_impro.html.twig &emsp;&emsp;&emsp;&emsp; - Header of Impro web page. Is no longer used due to the change of scenario.
+ ┃ ┃ ┣ 📜signature_fc.html.twig &emsp;&emsp;&emsp;&emsp; - Signature email from Fabrice COUPRIE.
+ ┃ ┣ 📂security 
+ | &emsp;&emsp;&emsp;&emsp; - Templates for the Security interface.
+ ┃ ┃ ┣ 📜forgot_pwd.html.twig &emsp;&emsp;&emsp;&emsp; - View to display the administrator email verification form in order to reset the password.
+ ┃ ┃ ┣ 📜login.html.twig &emsp;&emsp;&emsp;&emsp; - View to display the login form.
+ ┃ ┃ ┗ 📜reset_pwd.html.twig &emsp;&emsp;&emsp;&emsp; - View to display the form to reset the password.
+ ┃ ┣ 📂stat 
+ | &emsp;&emsp;&emsp;&emsp; - Templates for the Stat interface.
+ ┃ ┃ ┗ 📜index.html.twig &emsp;&emsp;&emsp;&emsp; - View to display graphics.
+ ┃ ┣ 📂welcome 
+ | &emsp;&emsp;&emsp;&emsp; - Templates for home pages.
+ ┃ ┃ ┗ 📜index.html.twig &emsp;&emsp;&emsp;&emsp; - View to display the information following the click and more if the form is submitted. Is no longer used due to the change of scenario.
+ ┃ ┣ 📜base.html.twig &emsp;&emsp;&emsp;&emsp; - Basic template for web pages excepted admin web pages.
+ ┃ ┗ 📜README.MD.twig &emsp;&emsp;&emsp;&emsp; - View to display the documentation in markdown.
+ ┣ 📂translations 
+ &emsp;&emsp;&emsp;&emsp; - For the implementation of a project translation system : <a href="https://symfony.com/doc/current/translation.html">https://symfony.com/doc/current/translation.html</a>
+ ┣ 📂var 
+ &emsp;&emsp;&emsp;&emsp; - Here will be stored the cache and log files. It is possible in the config files to configure the caching and what is written in the logs.
+ ┃ ┣ 📂cache
+ ┃ ┃ ┣ 📂dev  
+ | | &emsp;&emsp;&emsp;&emsp; - Cache in dev mode. Command: <b>symfony console cache:clear</b>
+ ┃ ┃ ┗ 📂prod 
+ | | &emsp;&emsp;&emsp;&emsp; - Cache in prod mode. Command: <b>symfony console cache:clear --env=prod</b>
+ ┃ ┗ 📂log
+ ┃ ┃ ┗ 📜dev.log &emsp;&emsp;&emsp;&emsp; - log files
+ ┣ 📂vendor 
+ &emsp;&emsp;&emsp;&emsp; - Where the packages are automatically installed during project initialization but you can use the <b>composer install</b> command to install them manually if necessary. To update the packages we use the <b>composer update</b> command and to add a package we use <b>composer require mypackage</b>.
+ ┣ 📜.env &emsp;&emsp;&emsp;&emsp; - Environment file to configure the dev or prod mode, the connection to the database, the smtp server for sending emails.
+ ┣ 📜composer.json &emsp;&emsp;&emsp;&emsp; - This file describes the dependencies of your project and may contain other metadata as well.
+ ┣ 📜composer.lock &emsp;&emsp;&emsp;&emsp; - This file contains all the packages and their exact versions, locking the project to those specific versions.
+ ┗ 📜symfony.lock  &emsp;&emsp;&emsp;&emsp; - Locks are used to guarantee exclusive access to some shared resource. In Symfony applications, you can use locks for example to ensure that a command is not executed more than once at the same time (on the same or different servers).
+ </pre>
+
+{% endapply %}

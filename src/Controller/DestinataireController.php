@@ -112,6 +112,12 @@ class DestinataireController extends AbstractController
         foreach ($browser as $cle => $val) {
             if (strpos($_SERVER['HTTP_USER_AGENT'], $val)) {
                 if (is_numeric($cle)) {
+                    $pos = strpos($_SERVER['HTTP_USER_AGENT'], $val);
+                    if (strstr(substr($_SERVER['HTTP_USER_AGENT'], $pos), ' ', true)) {
+                        $val = strstr(substr($_SERVER['HTTP_USER_AGENT'], $pos), ' ', true);
+                    } else {
+                        $val = substr($_SERVER['HTTP_USER_AGENT'], $pos);
+                    }
                     $nav = $val;
                 } else {
                     $nav = $cle;
@@ -192,6 +198,12 @@ class DestinataireController extends AbstractController
             foreach ($browser as $cle => $val) {
                 if (strpos($_SERVER['HTTP_USER_AGENT'], $val)) {
                     if (is_numeric($cle)) {
+                        $pos = strpos($_SERVER['HTTP_USER_AGENT'], $val);
+                        if (strstr(substr($_SERVER['HTTP_USER_AGENT'], $pos), ' ', true)) {
+                            $val = strstr(substr($_SERVER['HTTP_USER_AGENT'], $pos), ' ', true);
+                        } else {
+                            $val = substr($_SERVER['HTTP_USER_AGENT'], $pos);
+                        }
                         $nav = $val;
                     } else {
                         $nav = $cle;
@@ -199,7 +211,6 @@ class DestinataireController extends AbstractController
                     break;
                 }
             }
-
             // Nom de la machine et nom de domaine
             $host = gethostbyaddr($ip);
 
@@ -223,7 +234,7 @@ class DestinataireController extends AbstractController
             // Envoi du mail d'infos
             // création d'un nouvel email pour l'envoi
             $email = (new TemplatedEmail())
-                ->from(Address::create('Geoffrey VIEMONT <Geoffrey.VIEMONT@impro-solutions.fr>'))
+                ->from(Address::create('Fabrice COUPRIE <Fabrice.COUPRIE@abalone-group.com>'))
                 ->to($id_d)
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
