@@ -32,10 +32,7 @@
 		</form>
 
 	{% elseif stat is defined and stat %}
-		<h2 class="text-center">Statistiques de la campagne
-															"{{ campaign.name }}"
-															du
-			{{ campaign.date|format_datetime('short', 'none') }}</h2>
+		<h2 class="text-center">Statistiques de la campagne" {{ campaign.name }}" du {{ campaign.date|format_datetime('short', 'none') }}</h2>
 
 		<div class="row">
 			<canvas class="col-3 mt-5" id="clicks_stat" width="400" height="150"></canvas>
@@ -50,7 +47,7 @@
 	{% elseif campagne.isSent is defined and not campagne.isInfoSent %}
 
 		<h2 class="text-center">Vous avez lancé la campagne "{{ campagne.name }}"</h2>
-		<div class="h5 mt-4" id="first" data-gif-path = "{{ asset('images/loading.gif') }}"></div>
+		<div class="h5 mt-4" id="first" data-gif-path="{{ asset('images/loading.gif') }}"></div>
 		<div class="h5 mt-4" id="after">
 			<section class="mb-4">
 				<p class="h4 alert alert-success text-center">Vous avez envoyé
@@ -96,7 +93,18 @@
 
 	{% else %}
 		<h2 class="text-center">Bienvenue sur le tableau de bord de SwordPhish</h2>
-
+		<section class="mt-4">
+			<h4>Pour commencer une nouvelle campagne :</h4>
+			<p class="font-italic font-weight-bold">Pré-requis : avoir une liste de destinataires définie</p>
+			<ol class="h5">
+				<li>Cliquer sur le menu <i class="fas fa-paper-plane"> Les campagnes</i></li>
+				<li>Cliquer sur le bouton  <button class="btn btn-primary"> Créer une campagne</button></li>
+				<li>Remplir les champs obligatoires du formulaire contenant une <span class="text-danger">*</span> et cliquer sur le bouton <button class="btn btn-primary"> Créer</button></li>
+				<p class="h5 alert alert-danger">Attention! Tous les destinataires sont sélectionnés par défaut.</p>
+				<li>Cliquer sur le bouton  <button class="btn btn-danger"> <i class="fas fa-mail-bulk"> Envoi Campagne</i></button></li>
+				
+			</ol>
+		</section>
 
 	{% endif %}
 

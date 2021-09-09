@@ -82,7 +82,7 @@ class EmailController extends AbstractController
         $nb_destinataires = $campagne->getNumberRecipientsPerGroup();
         // Interval de temps en minutes entre chaque envoi de groupes
         $interval = $campagne->getTempoMinutes();
-        // Longueur du tableau des destinataires
+        // Nombre de destinataires concernés par la campagne
         $count = count($destinataires);
         // On boucle sur l'ensemble des destinataires pour former les groupes d'envoi
         $groups = [];
@@ -98,7 +98,8 @@ class EmailController extends AbstractController
             // on vérifie la longueur du tableau de destinataires restants
             $count = count($destinataires);
         }
-
+        //Nombre de groupes de destinataires
+        $count_group = count($groups);
         // on récupère l'index du groupe de destinataires pour l'envoi à partir du script js
         if (isset($_POST['index'])) {
             $index = $_POST['index'];
@@ -120,9 +121,7 @@ class EmailController extends AbstractController
                 //->replyTo('fabien@example.com')
                 ->priority(TemplatedEmail::PRIORITY_HIGH)
                 ->subject('Gagner des tickets de cinéma !')
-                // ->text('Sending emails is fun again!')
-                // ->html('<p>Message from '.$destinataire.' pour la campagne '.$campagne -> getName().'</p>')
-                ->htmlTemplate('email/index.html.twig')
+                ->htmlTemplate('email/index.html.twig') // template email d'envoi de la campagne
                 ->context([
                     'id_campagne' => $uid,
                     'id_destinataire' => $destinataire->getId(),
@@ -137,7 +136,7 @@ class EmailController extends AbstractController
         }
 
         // si tous les groupes de destinataires sont envoyés
-        if ($index == count($groups[$index]) - 1) {
+        if ($index == $count_group - 1) {
 
             // on met à jour le champ isSent de la campagne à true
             $campagne->setIsSent(true);
@@ -148,7 +147,7 @@ class EmailController extends AbstractController
         return $this->render('admin/index.html.twig', [
             'campagne' => $campagne,
             'index' => $index + 1,
-            'index_max' => count($groups) - 1,
+            'index_max' => $count_group - 1,
             'counter' => $interval*60, // pour voir le décompte en seconde avant l'envoi suivant
         ]);
     }
