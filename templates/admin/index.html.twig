@@ -95,15 +95,26 @@
 		<h2 class="text-center">Bienvenue sur le tableau de bord de SwordPhish</h2>
 		<section class="mt-4">
 			<h4>Pour commencer une nouvelle campagne :</h4>
-			<p class="font-italic font-weight-bold">Pré-requis : avoir une liste de destinataires définie</p>
-			<ol class="h5">
-				<li>Cliquer sur le menu <i class="fas fa-paper-plane"> Les campagnes</i></li>
-				<li>Cliquer sur le bouton  <button class="btn btn-primary"> Créer une campagne</button></li>
-				<li>Remplir les champs obligatoires du formulaire contenant une <span class="text-danger">*</span> et cliquer sur le bouton <button class="btn btn-primary"> Créer</button></li>
-				<p class="h5 alert alert-danger">Attention! Tous les destinataires sont sélectionnés par défaut.</p>
+			<p class="">Pré-requis : avoir une liste de destinataires définie</p>
+			<ol class="h5 mb-4">
+				<li class="mb-4">Cliquer sur le menu <i class="fas fa-paper-plane"> Les campagnes</i></li>
+				<li class="mb-4">Cliquer sur le bouton  <button class="btn btn-primary"> Créer une campagne</button></li>
+				<li class="mb-2">Remplir les champs obligatoires du formulaire contenant une <span class="text-danger">*</span> et cliquer sur le bouton <button class="btn btn-primary"> Créer</button></li>
+				<p class="alert alert-danger mb-4">Attention! Tous les destinataires sont sélectionnés par défaut.</p>
 				<li>Cliquer sur le bouton  <button class="btn btn-danger"> <i class="fas fa-mail-bulk"> Envoi Campagne</i></button></li>
-				
+				<p>Un message d'alerte va vous demander de confirmer l'envoi.</p>
 			</ol>
+			<h4 class="mb-4">Après le lancement de la campagne :</h4>
+			<ol class="h5">
+				<li class="mb-4">Cliquer sur le bouton  <button class="btn btn-primary"> <i class="fas fa-chart-line"> Stat Campagne</i></button> pour visualiser les statistiques</li>
+				<li>Cliquer sur le bouton  <button class="btn btn-warning"> <i class="fas fa-mail-bulk"> Envoi Infos</i></button> pour envoyer les informations de sensibilisation</li>
+				<p>Un message d'alerte va vous demander de confirmer l'envoi.</p>
+				<li>Cliquer sur le bouton  <button class="btn bg-dark text-white"> <i class="fa fa-times-circle-o"> Désactiver</i></button> pour désactiver la campagne</li>
+			</ol>
+		</section>
+		<section class="mt-4">
+			<h4>Tutoriels</h4>
+			<a href="{{ asset('file/SwordPhish - Tutoriel.pdf') }}" target="_blank" class="font-weight-bold" style="font-size: 1rem;">Afficher le fichier PDF dans une autre page du navigateur</a>
 		</section>
 
 	{% endif %}

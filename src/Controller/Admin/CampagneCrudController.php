@@ -197,15 +197,6 @@ class CampagneCrudController extends AbstractCrudController
     {
         yield IdField::new('id')
             ->hideOnForm();
-        
-        // yield ChoiceField::new('destinataires')
-        //     ->onlyOnForms()
-        //     ->autocomplete()
-        //     ->renderExpanded()
-        //     ->setChoices([
-        //         'tout' => true
-        //     ])
-        // ;
         yield AssociationField::new('destinataires')
             ->setHelp('Pas besoin de sélectionner les destinataires, ils sont tous sélectionnés par défaut à la création d\'une campagne. Vous pouvez modifier la liste en enlevant des destinataires en mode edit.');
         yield TextField::new('name', 'Intitulé');

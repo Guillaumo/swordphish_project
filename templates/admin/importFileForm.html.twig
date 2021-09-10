@@ -23,29 +23,49 @@
 			</button>
 		</fieldset>
 	</form>
+	<section>
+		<h2 class="text-center">Formalisme du fichier CSV à respecter pour l'import</h2>
+		<table class="table">
+			<thead>
+				<tr class="">
+					<th scope="col">Nom Complet</th>
+					<th scope="col">Société</th>
+					<th scope="col">Email Address</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td scope="row">Prénom NOM</td>
+					<td>Exemple: Abalone France</td>
+					<td>Prenom.NOM@.....</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
 	{% if old_destinataire_result %}
 		<p>Destinataires ne faisant plus partis du fichier d'import mais présents dans les résultats d'anciennes campagnes :</p>
-			<table class="table">
-				<thead>
-					<tr class="">
-						<th scope="col">Nom</th>
-						<th scope="col">Prénom</th>
-						<th scope="col">Agence</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for destinataire in old_destinataire_result %}
+		<table class="table">
+			<thead>
+				<tr class="">
+					<th scope="col">Nom</th>
+					<th scope="col">Prénom</th>
+					<th scope="col">Agence</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for destinataire in old_destinataire_result %}
 					<tr>
 						<td scope="row">{{ destinataire.lastname }}</td>
 						<td>{{ destinataire.firstname }}</td>
 						<td>{{ destinataire.office }}</td>
 					</tr>
-					{% endfor %}
-				</tbody>
+				{% endfor %}
+			</tbody>
 		</table>
 		<p>Ces destinataires ne seront pas supprimés de la BD.<br>
-		Si vous souhaitez les supprimés, il faut les supprimés des résultats.<br>
-		Ensuite vous pouvez de nouveau importer le fichier d'import.
+			Si vous souhaitez les supprimés, il faut les supprimés des résultats.<br>
+			Ensuite vous pouvez de nouveau importer le fichier d'import.
 		</p>
 	{% endif %}
 

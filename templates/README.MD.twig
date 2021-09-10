@@ -1,5 +1,5 @@
 {% apply markdown_to_html %}
-# ![Logo]({{ asset('images/swordphish-logo-70x70.png') }}) SwordPhish
+# ![Logo]({{ asset('images/swordphish-logo-70x70.png') }}) [SwordPhish]({{ path('welcome') }})
 ## _Your phishing campaign Application_
 
 ## Table of Contents
@@ -7,14 +7,12 @@
 2. [Technologies](#technologies)
 3. [Installation](#installation)
 4. [Presentation](#presentation)
+5. [Technical explanations of the functionalities](#explanations)
 
 ## General Info <a id="general-info"></a>
 ***
 SwordPhish is an application developed with the Symfony framework, in PHP for the back-end and in Twig, Bootstrap and JS for the front-end.
 
-
-### Screenshot
-![Capture]({{ asset('images/SwordPhish_capture.png') }})
 
 ## Technologies <a id="technologies"></a>
 ***
@@ -206,5 +204,281 @@ Bootstrap and chart.js are implemented via CDN links.
  ┣ 📜composer.lock &emsp;&emsp;&emsp;&emsp; - This file contains all the packages and their exact versions, locking the project to those specific versions.
  ┗ 📜symfony.lock  &emsp;&emsp;&emsp;&emsp; - Locks are used to guarantee exclusive access to some shared resource. In Symfony applications, you can use locks for example to ensure that a command is not executed more than once at the same time (on the same or different servers).
  </pre>
+
+ ## Technical explanations of the functionalities<span id="explanations"></span>
+ ***
+ Two main parts :
+ - admin templates : the basic template is bundle/EasyAdminBundle/page/content.html.twig
+ - admin layout : Bootstrap 4
+ - public templates : the basic template is templates/base.html.twig
+ - public templates : Bootstrap 5
+
+## Home page
+- Controller : Controller/WelcomeController.php
+```php
+/**
+     * @Route("/", name="welcome")
+     */
+    public function index(): Response
+    {
+        return $this->redirectToRoute('admin');
+    }
+```
+The route redirect to the route admin.
+if you are logged like an user with the admin role, you will be redirected to the login page.
+
+ ## Login/logout part
+ - Template : security/login.html.twig
+ - Controller : Controller/SecurityController.php
+ ```php
+/**
+     * @Route("/login", name="app_login")
+     */
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername, 
+            'error' => $error,
+        ]);
+    }
+ ```
+The route is used to define the function that will process.
+The render function call the template used for the view with parameters needed.
+When the form is submitted, the class AppAdminAuthenticator in the controller Security/AppAdminAuthenticator.php is called.
+About the role given, it is in the bin/config/packages/security.yaml :
+```yaml
+access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+```
+-> this gives permission to all routes beginning by /admin to users with the role ROLE_ADMIN.
+
+## Admin interface part
+if you are logged as an user with admin role you will be redirected to the route admin :
+- controller : Controller/Admin/DashboardController.php
+
+```php
+ /**
+     * @Route("/admin", name="admin")
+     */
+    public function index(): Response
+    {
+        return $this->render('admin/index.html.twig');
+    }
+```
+This function displays the main admin template : templates/admin/index.html.twig
+
+```php
+ public function configureDashboard(): Dashboard
+    {
+        return Dashboard::new()
+            ->setTitle('<h1><img src="images/swordphish-logo-70x70.png"/> SwordPhish</h1>')
+            ->setFaviconPath("images/swordphish-logo-70x70.png");
+    }
+```
+This function manage mainly the Header.
+
+```php
+public function configureMenuItems(): iterable
+    {
+        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-tachometer-alt')
+            ->setCssClass('h5');
+        yield MenuItem::section();
+        yield MenuItem::linkToCrud('Les campagnes', 'fas fa-paper-plane', Campagne::class)
+            ->setCssClass('h5');
+        yield MenuItem::linkToCrud('Les destinataires', 'fas fa-users', Destinataire::class)
+            ->setCssClass('h5');
+        yield MenuItem::linkToCrud('Les résultats', 'fas fa-list-alt', ResultCampaignUser::class)
+            ->setCssClass('h5');
+        yield MenuItem::section('Paramétres', 'fa fa-cog')
+            ->setCssClass('h4');
+        yield MenuItem::linkToRoute('Import destinataires', 'fas fa-file-import', 'import_destinataires')
+            ->setCssClass('h5');
+        yield MenuItem::linkToRoute('Gestion admin', 'fas fa-user-cog', 'gestion_admin')
+            ->setCssClass('h5');
+        yield MenuItem::section();
+        yield MenuItem::linkToRoute('Documentation', 'fas fa-file', 'readme')
+            ->setCssClass('h5');
+    }
+```
+This function manage the left menu.
+Each menu like "les campagnes", "Les destinataires", etc, with a linkToCrud function redirect to the Crud Controllers.
+
+Each Crud Controller manage its own entity as CampagneCrudController for the entity Campagne.php.
+- Controller : Controller/Admin/CampagneCrudController.php
+```php
+public function configureFields(string $pageName): iterable
+    {
+        yield IdField::new('id')
+            ->hideOnForm();
+        yield AssociationField::new('destinataires')
+            ->setHelp('Pas besoin de sélectionner les destinataires, ils sont tous sélectionnés par défaut à la création d\'une campagne. Vous pouvez modifier la liste en enlevant des destinataires en mode edit.');
+        yield TextField::new('name', 'Intitulé');
+        yield DateField::new('date')
+            ->setFormTypeOptions([
+                'html5' => true,
+                'years' => range(date('Y'), date('Y') + 2),
+                'widget' => 'single_text',
+            ])
+            ->hideOnForm();
+        yield IntegerField::new('number_recipients_per_group','Nombre de destinataires par groupe d\'envoi')
+            ->onlyOnForms()
+        ;
+        yield IntegerField::new('tempo_minutes','Temporisation des envois en minutes')
+            ->onlyOnForms()
+        ;
+        yield IntegerField::new('duration_sending','Durée de l\'envoi')
+            ->hideOnForm()
+            ->setTextAlign('center')
+            ->formatValue(function ($value) {
+                if($value>=60)
+                {
+                    $heures = intdiv($value,60);
+                    $minutes = $value - $heures*60;
+                    return $heures.' heure(s) et '.$minutes.' minute(s)';
+                }
+                else
+                {
+                    return $value.' minute(s)';
+                }
+            })
+        ;
+        yield BooleanField::new('isEnable', 'Campagne activée')
+            ->onlyWhenUpdating();
+        yield BooleanField::new('isSent', 'Campagne envoyée')
+            ->onlyWhenUpdating();
+        yield BooleanField::new('isInfoSent', 'Infos envoyés')
+            ->onlyWhenUpdating();   
+    }
+```
+This function manage the fields from the entity Campagne.php
+
+```php
+/**
+     * Configuration des boutons d'actions possibles pour une campagne donnée
+     *
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        // bouton d'envoi des mails pour une campagne donnée - affiché si la campagne n'a pas été envoyée
+        $sendEmail = Action::new('sendEmail', 'Envoi Campagne', 'fas fa-mail-bulk')
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if ((!$campagne->getIsSent()) && ($campagne->getIsEnable())) {
+                    $isDisplayed = true;
+                }
+                return $isDisplayed;
+            })
+            ->linkToRoute('admin_email_campagne', function (Campagne $campagne) {
+                return [
+                    'uid' => $campagne->getId(),
+                ];
+            })
+            ->addCssClass('btn btn-danger btn-block w-30')
+            ->setHtmlAttributes([
+                'onclick' => "return(confirm('Etes-vous sûr de vouloir envoyer les emails de la campagne ?'));"
+            ]);
+
+        // bouton d'envoi du retour d'infos vers les destinataires pour une campagne donnée - affiché si la campagne a été envoyée
+        $sendInfo = Action::new('sendInfo', 'Envoi Infos', 'fas fa-mail-bulk')
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if (($campagne->getIsSent()) && ($campagne->getIsEnable())) {
+                    $isDisplayed = true;
+                }
+                if($campagne->getIsInfoSent()) {
+                    $isDisplayed = false;
+                }
+                return $isDisplayed;
+            })
+            ->linkToRoute('admin_email_infos', function (Campagne $campagne) {
+                return [
+                    'uid' => $campagne->getId(),
+                ];
+            })
+            ->addCssClass('btn btn-warning btn-block w-30')
+            ->setHtmlAttributes([
+                'onclick' => "return(confirm('Etes-vous sûr de vouloir envoyer les emails d\'infos ?'));"
+            ]);
+
+        // bouton d'envoi de mail(s) de test pour une campagne donnée
+        $sendTest = Action::new('sendTest', 'Envoi test', 'fas fa-envelope')
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if ($campagne->getIsEnable()) {
+                    $isDisplayed = true;
+                }
+                return $isDisplayed;
+            })
+            ->linkToRoute('admin_email_test', function (Campagne $campagne) {
+                return ['uid' => $campagne->getId(),];
+            })
+            ->addCssClass('btn btn-success btn-block w-30');
+
+        // bouton pour afficher les stats
+        $statistic = Action::new('statistic', 'Stat campagne', 'fas fa-chart-line')
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if ($campagne->getIsSent()) {
+                    $isDisplayed = true;
+                }
+                return $isDisplayed;
+            })
+            ->linkToRoute('admin_stat', function (Campagne $campagne) {
+                return ['uid' => $campagne->getId(),];
+            })
+            ->addCssClass('btn btn-primary btn-block w-30');
+
+        // bouton de désactivaton de la campagne
+        $disenable = Action::new('disenable', 'Désactiver', 'fa fa-times-circle-o')
+            ->addCssClass('btn bg-dark text-white')
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if ($campagne->getIsEnable()) {
+                    $isDisplayed = true;
+                }
+                return $isDisplayed;
+            })
+            ->linkToRoute('admin_campaign_toggle', function (Campagne $campagne) {
+                return ['uid' => $campagne->getId()];
+            });
+
+        // bouton d'activaton de la campagne
+        $enable = Action::new('enable', 'Activer', 'fa fa-check-circle-o')
+            ->addCssClass('btn bg-dark text-white')
+            ->displayIf(static function (Campagne $campagne) {
+                $isDisplayed = false;
+                if (!$campagne->getIsEnable()) {
+                    $isDisplayed = true;
+                }
+                return $isDisplayed;
+            })
+            ->linkToRoute('admin_campaign_toggle', function (Campagne $campagne) {
+                return ['uid' => $campagne->getId()];
+            });
+
+
+        return $actions
+            ->add(Crud::PAGE_INDEX, $statistic)
+            ->add(Crud::PAGE_INDEX, $sendEmail)
+            ->add(Crud::PAGE_INDEX, $sendInfo)
+            ->add(Crud::PAGE_INDEX, $sendTest)
+            ->add(crud::PAGE_INDEX, $disenable)
+            ->add(crud::PAGE_INDEX, $enable)
+            ->reorder(Crud::PAGE_INDEX, ['enable', 'disenable', 'sendTest', 'sendInfo', 'sendEmail', 'statistic'])
+            ;
+    }
+```
+This function manage the different actions
+
+
+
+
 
 {% endapply %}

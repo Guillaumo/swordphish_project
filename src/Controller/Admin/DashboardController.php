@@ -62,12 +62,12 @@ class DashboardController extends AbstractDashboardController
 
             // Insertion en BD la liste des destinataires
             foreach ($lines as $line) {
-                $destinataire = $destinataireRepository->findOneBy(['email' => $line[6]]);
+                $destinataire = $destinataireRepository->findOneBy(['email' => $line[2]]);
                 // si le destinataire n'existe pas déjà
                 if (is_null($destinataire)) {
                     $destinataire = new Destinataire;
-                    $destinataire->setEmail($line[6]);
-                    $destinataire->setOffice($line[4]);
+                    $destinataire->setEmail($line[2]);
+                    $destinataire->setOffice($line[1]);
                     $firstname = strstr($line[0], ' ', true);
                     $pos = strpos($line[0], ' ');
                     $lastname = substr($line[0], $pos + 1);
@@ -85,7 +85,7 @@ class DashboardController extends AbstractDashboardController
             foreach ($destinataires as $destinataire) {
                 foreach ($lines as $line) {
                     // on teste si le destinataire est présent dans la liste
-                    if ($line[6] === $destinataire->getEmail()) {
+                    if ($line[2] === $destinataire->getEmail()) {
                         $match = true;
                         break;
                     }
