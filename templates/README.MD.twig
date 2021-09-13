@@ -27,10 +27,6 @@ A list of technologies used within the project:
 ***
 For the installation, see : [https://symfony.com/doc/current/setup.html](https://symfony.com/doc/current/setup.html) and [https://symfony.com/doc/current/the-fast-track/fr/1-tools.html](https://symfony.com/doc/current/the-fast-track/fr/1-tools.html)
 
-```sh
-$ git clone https://example.com
-
-```
 
 ## Presentation <a id="presentation"></a>
 ***
@@ -214,6 +210,7 @@ Bootstrap and chart.js are implemented via CDN links.
  - public templates : Bootstrap 5
 
 ## Home page
+
 - Controller : Controller/WelcomeController.php
 ```php
 /**
@@ -227,7 +224,8 @@ Bootstrap and chart.js are implemented via CDN links.
 The route redirect to the route admin.
 if you are logged like an user with the admin role, you will be redirected to the login page.
 
- ## Login/logout part
+## Login/logout part
+
  - Template : security/login.html.twig
  - Controller : Controller/SecurityController.php
  ```php
@@ -258,6 +256,7 @@ access_control:
 -> this gives permission to all routes beginning by /admin to users with the role ROLE_ADMIN.
 
 ## Admin interface part
+
 if you are logged as an user with admin role you will be redirected to the route admin :
 - controller : Controller/Admin/DashboardController.php
 
@@ -475,8 +474,95 @@ This function manage the fields from the entity Campagne.php
             ;
     }
 ```
-This function manage the different actions
+This function manage the different actions of the application.
 
+## Sending email action
+- The controllers : 
+                    - Controller/EmailContoller.php
+                    - Controller/DestinataireController.php
+- The templates : 
+                    Email part :
+                    - templates/email/index.html.twig -> the main email template for the phishing campaign
+                    - templates/email/infos.html.twig
+                    Web page part :
+                    - templates/destinataire/index.html.twig -> the main web page template for the phishing campaign
+                    - templates/destinataire/validationForm.html.twig
+
+
+    ### Email process example
+
+    The controller :
+
+    ```php
+    /**
+     * @Route("/admin/email/campagne/{uid}", name="admin_email_campagne")
+     */
+    public function sendEmailCampagne($uid, CampagneRepository $campagneRepository, DestinataireRepository $destinataireRepository, MailerInterface $mailer, EntityManagerInterface $em): Response
+    {
+        .....
+        // création d'un nouvel email pour l'envoi vers chaque destinataire
+            $email = (new TemplatedEmail())
+                ->from(Address::create('Catherine Frot <catherine.frot@abalone.com>'))
+                ->to($address)
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                ->priority(TemplatedEmail::PRIORITY_HIGH)
+                ->subject('Gagner des tickets de cinéma !')
+                ->htmlTemplate('email/index.html.twig') // template email d'envoi de la campagne
+                ->context([
+                    'id_campagne' => $uid,
+                    'id_destinataire' => $destinataire->getId(),
+                    'isTest' => false,
+                ]);
+
+            try {
+                $mailer->send($email);
+            } catch (TransportExceptionInterface $mailerException) {
+                throw $mailerException;
+            }
+        .....
+    }
+    ```
+    we have :
+        * htmlTemplate function indicates the right template
+        * the context function sends to the template the variables we need.
+
+    The template :
+    In the template, we get the variables with their value using like (please take off \ before { or before }):
+    ```html
+     <a href="\{\{ absolute_url(path('destinataire_test', \{id_c: id_campagne, id_d: id_destinataire\})) \}\}" style="font-size: 1.5rem;">Gagnez des places de cinema !</a>
+     ```
+    We can insert some php code like conditions in using some blocks with {} and %if% inside }.
+
+    ### Web page process example : the landing page
+    
+    The controller :
+    
+    ```php
+    /**
+     * @Route("/destinataire/{id_c}/{id_d}", name="destinataire_user")
+     */
+    public function landingPage($id_c, $id_d, CampagneRepository $campagneRepository, DestinataireRepository $destinataireRepository, EntityManagerInterface $entityManagerInterface, ResultCampaignUserRepository $resultCampaignUserRepository, Request $request): Response
+    {
+        .....
+        return $this->render('destinataire/index.html.twig', [
+            'id_campagne' => $id_c,
+            'id_destinataire' => $id_d,
+            'post' => $post,
+        ]);
+    ```
+    The render function returns to the template with varaibles we need.
+
+    The template : we have different blocks between {} and %% :
+    * extends : to inherit from the base layout
+    * title : to write a specific title for this page
+    * stylesheets : to add specific CSS files for this page
+    * javascripts : to add specific JS fiels for this page
+    * header : to add a header for this page with the php instruction "include"
+    * body : hier the main content of this page
+    * footer : to add a footer for this page with the php instruction "include"
+    * body_javascript : to add a specific JS script for this page (to get the resolution information from visitors)
 
 
 
